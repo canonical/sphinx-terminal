@@ -23,22 +23,22 @@ from sphinx import addnodes
 from sphinx.util.docutils import SphinxDirective
 
 
-def parse_contents(contents: StringList) -> list[str]:
+def parse_contents(contents: StringList) -> list[list[str]]:
     """Parse the directive's content.
 
     This is to differentiate between input and output lines in
     the directive's content.
     """
-    command_output: str = ""
-    out: list[str] = []
+    command_output: list[str] = []
+    out: list[list[str]] = []
 
     for line in contents:
         if line.startswith(":input: "):
             out.append(command_output)
-            out.append(line)
-            command_output = ""
+            out.append([line])
+            command_output = []
         else:
-            command_output.join(line)
+            command_output.append(line)
 
     out.append(command_output)
     return out

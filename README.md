@@ -10,19 +10,24 @@ providing input and output as follows:
 
 ```
 .. terminal::
-    :input: echo hello
+    :input: echo 'hello'
 
         hello
+    :input: echo 'goodbye'
+
+        goodbye
 
 ```
 
-The prompt defaults to `user@host:~$`. To customize this, use the `:user:` and `:host:` options.
+The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
+and :dir: options.
 
 ```
 .. terminal::
     :user: author
     :host: canonical
-    :input: echo hello
+    :dir: ~/path
+    :input: echo 'hello'
 
         hello
 
@@ -33,7 +38,7 @@ To enable a copy button for users, include the `:copy:` flag as a directive opti
 ```
 .. terminal::
     :copy:
-    :input: echo hello
+    :input: echo 'hello'
 
         hello
 

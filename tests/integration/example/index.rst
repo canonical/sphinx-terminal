@@ -6,11 +6,10 @@ Test doc
     :copy:
     :user: author
     :host: canonical
-    :dir: path
-    :input: echo hello
+    :dir: ~/path
+    :input: echo 'hello'
 
     hello
+    :input: echo 'goodbye'
 
-    :input: still working?
-
-    yup
+    goodbye
