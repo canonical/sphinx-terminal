@@ -18,25 +18,35 @@
 
 from sphinx.util.typing import ExtensionMetadata
 from sphinx.application import Sphinx
-from .hello import HelloDirective
+from .directive import TerminalDirective
+from sphinx_terminal import common
 
 try:
     from ._version import __version__
-except ImportError:  # pragma: no cover
+except ImportError:
     from importlib.metadata import version, PackageNotFoundError
 
     try:
-        __version__ = version("hello_ext")
+        __version__ = version("pydantic_kitbash")
     except PackageNotFoundError:
         __version__ = "dev"
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
-    """Add the extension's directive to Sphinx.
+    """Connect the extension to the Sphinx application instance.
 
-    :returns: ExtensionMetadata
+    app (Sphinx):
+
+    returns: ExtensionMetadata
     """
-    app.add_directive("hello", HelloDirective)
+    app.add_directive("terminal", TerminalDirective)
+    common.add_css(app, "terminal-output.css")
+
+    copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
+    app.add_config_value("copybutton_selector", copybutton_classes, "env")
+
+    if app.config.copybutton_selector == "div.highlight pre":
+        app.config.copybutton_selector = copybutton_classes
 
     return {
         "version": __version__,

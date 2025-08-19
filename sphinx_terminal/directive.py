@@ -20,11 +20,7 @@ from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.statemachine import StringList
 from sphinx import addnodes
-from sphinx.application import Sphinx
 from sphinx.util.docutils import SphinxDirective
-from sphinx.util.typing import ExtensionMetadata
-
-from sphinx_terminal import common
 
 
 def parse_contents(contents: StringList) -> list[str]:
@@ -48,7 +44,7 @@ def parse_contents(contents: StringList) -> list[str]:
     return out
 
 
-class TerminalOutput(SphinxDirective):
+class TerminalDirective(SphinxDirective):
     """Define the terminal directive's state and behavior."""
 
     required_arguments = 0
@@ -137,22 +133,3 @@ class TerminalOutput(SphinxDirective):
                 output["classes"].append("terminal-code")
                 out.append(output)
         return [out]
-
-
-def setup(app: Sphinx) -> ExtensionMetadata:
-    """Connect the extension to the Sphinx application instance.
-
-    app (Sphinx):
-
-    returns: ExtensionMetadata
-    """
-    app.add_directive("terminal", TerminalOutput)
-    common.add_css(app, "terminal-output.css")
-
-    copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
-    app.add_config_value("copybutton_selector", copybutton_classes, "env")
-
-    if app.config.copybutton_selector == "div.highlight pre":
-        app.config.copybutton_selector = copybutton_classes
-
-    return {"version": "0.1", "parallel_read_safe": True, "parallel_write_safe": True}
