@@ -1,18 +1,18 @@
-# This file is part of sphinx-ext-template.
+# This file is part of sphinx-terminal.
 #
 # Copyright 2025 Canonical Ltd.
 #
 # This program is free software: you can redistribute it and/or modify it under the
-# terms of the GNU Lesser General Public License version 3, as published by the Free
-# Software Foundation.
+# terms of the GNU General Public License version 3, as published by the Free Software
+# Foundation.
 #
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranties of MERCHANTABILITY, SATISFACTORY
-# QUALITY, or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
-# License for more details.
+# QUALITY, or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU Lesser General Public License along with
-# this program.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with this
+# program.  If not, see <http://www.gnu.org/licenses/>.
 
 """Adds the directive to Sphinx."""
 
@@ -40,7 +40,7 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     returns: ExtensionMetadata
     """
     app.add_directive("terminal", TerminalDirective)
-    common.add_css(app, "terminal-output.css")
+    common.add_css(app, "terminal.css")
 
     copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
     app.add_config_value("copybutton_selector", copybutton_classes, "env")
