@@ -56,8 +56,8 @@ class TerminalDirective(SphinxDirective):
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
-        "scroll": directives.unchanged,
-        "copy": directives.unchanged,
+        "scroll": directives.flag,
+        "copy": directives.flag,
     }
 
     @staticmethod
