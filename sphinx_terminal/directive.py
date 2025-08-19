@@ -1,4 +1,4 @@
-# This file is part of sphinx-ext-template.
+# This file is part of sphinx-terminal.
 #
 # Copyright 2025 Canonical Ltd.
 #
@@ -14,34 +14,42 @@
 # You should have received a copy of the GNU Lesser General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""The core elements of the sphinx-terminal directive."""
+
 from docutils import nodes
-from sphinx.util.docutils import SphinxDirective
 from docutils.parsers.rst import directives
-from . import common
-import sphinx
+from docutils.statemachine import StringList
+from sphinx import addnodes
 from sphinx.application import Sphinx
+from sphinx.util.docutils import SphinxDirective
+from sphinx.util.typing import ExtensionMetadata
+
+from sphinx_terminal import common
 
 
-copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
+def parse_contents(contents: StringList) -> list[str]:
+    """Parse the directive's content.
 
-
-def parse_contents(contents):
-    command_output = []
-    out = []
+    This is to differentiate between input and output lines in
+    the directive's content.
+    """
+    command_output: str = ""
+    out: list[str] = []
 
     for line in contents:
         if line.startswith(":input: "):
             out.append(command_output)
-            out.append([line])
-            command_output = []
+            out.append(line)
+            command_output = ""
         else:
-            command_output.append(line)
+            command_output.join(line)
 
     out.append(command_output)
     return out
 
 
 class TerminalOutput(SphinxDirective):
+    """Define the terminal directive's state and behavior."""
 
     required_arguments = 0
     optional_arguments = 0
@@ -58,7 +66,7 @@ class TerminalOutput(SphinxDirective):
 
     @staticmethod
     def input_line(prompt_text: str, command: str) -> nodes.container:
-
+        """Construct the prompt with the user-provided options (if any)."""
         inpline = nodes.container()
         inpline["classes"].append("input")
 
@@ -74,23 +82,23 @@ class TerminalOutput(SphinxDirective):
         inp = nodes.literal(text=command)
         inp["classes"].append("command")
         inpline.append(inp)
-        # inpline.append(nodes.paragraph())
         return inpline
 
-    def run(self) -> list[nodes:
+    def run(self) -> list[nodes.Node]:
+        """Construct the output of the terminal directive."""
         # if :user: or :host: are provided, replace those in the prompt
 
         classes = self.options.get("class", "")
         command = self.options.get("input", "")
         user = self.options.get("user", "user")
         host = self.options.get("host", "host")
-        dir = self.options.get("dir", "~")
+        prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
         if user and host:
-            prompt_text = f"{user}@{host}:{dir}{user_symbol} "
+            prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
         elif user and not host:
             # Only the user is supplied
-            prompt_text = f"{user}:{dir}{user_symbol} "
+            prompt_text = f"{user}:{prompt_dir}{user_symbol} "
         else:
             # Omit both user and host, just showing the host
             # doesn't really make sense
@@ -106,9 +114,7 @@ class TerminalOutput(SphinxDirective):
         # can't figure out how to disable line numbering and the
         # linenothreshold kwarg seems to be required.
         out.append(
-            sphinx.addnodes.highlightlang(
-                lang="text", force=False, linenothreshold=10000
-            )
+            addnodes.highlightlang(lang="text", force=False, linenothreshold=10000)
         )
         if "scroll" in self.options:
             out["classes"].append("scroll")
@@ -116,7 +122,6 @@ class TerminalOutput(SphinxDirective):
         # Add the original prompt and input
 
         out.append(self.input_line(prompt_text, command))
-        # breakpoint()
 
         # Go through the content and append all lines as output
         # except for the ones that start with ":input: " - those get
@@ -126,7 +131,7 @@ class TerminalOutput(SphinxDirective):
 
         for blob in filter(None, parsed_content):
             if blob[0].startswith(":input: "):
-                out.append(self.input_line(prompt_text, blob[0][len(":input: "):]))
+                out.append(self.input_line(prompt_text, blob[0][len(":input: ") :]))
             else:
                 output = nodes.literal_block(text="\n".join(blob))
                 output["classes"].append("terminal-code")
@@ -134,13 +139,20 @@ class TerminalOutput(SphinxDirective):
         return [out]
 
 
-def setup(app: Sphinx):
-    app.add_directive("terminal", TerminalOutput)
+def setup(app: Sphinx) -> ExtensionMetadata:
+    """Connect the extension to the Sphinx application instance.
 
+    app (Sphinx):
+
+    returns: ExtensionMetadata
+    """
+    app.add_directive("terminal", TerminalOutput)
     common.add_css(app, "terminal-output.css")
-    if "copybutton_selector" not in app.config._raw_config:
-        app.config._raw_config.setdefault("copybutton_selector", copybutton_classes)
-    if app.config._raw_config["copybutton_selector"] == "div.highlight pre":
-        app.config._raw_config["copybutton_selector"] = copybutton_classes
+
+    copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
+    app.add_config_value("copybutton_selector", copybutton_classes, "env")
+
+    if app.config.copybutton_selector == "div.highlight pre":
+        app.config.copybutton_selector = copybutton_classes
 
     return {"version": "0.1", "parallel_read_safe": True, "parallel_write_safe": True}

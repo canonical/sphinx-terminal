@@ -1,8 +1,5 @@
 # sphinx-terminal
 
-<!-- Answer elevator-pitch questions about the extension – What is it? What does it do? What
-essential problem does it solve? -->
-
 sphinx-terminal allows you to display terminal input and output in your Sphinx
 documentation.
 
@@ -16,9 +13,22 @@ providing input and output as follows:
     :input: echo hello
 
         hello
+
 ```
 
-To enable a copy button for users, include the `:copy:` flag as a directive option:
+The prompt defaults to `user@host:~$`. To customize this, use the `:user:` and `:host:` options.
+
+```
+.. terminal::
+    :user: author
+    :host: canonical
+    :input: echo hello
+
+        hello
+
+```
+
+To enable a copy button for users, include the `:copy:` flag as a directive option.
 
 ```
 .. terminal::
@@ -26,12 +36,10 @@ To enable a copy button for users, include the `:copy:` flag as a directive opti
     :input: echo hello
 
         hello
+
 ```
 
 ## Project setup
-
-<!-- Provide the simplest way to install the extension. In most cases, this will
-be via `pip`. -->
 
 sphinx-terminal is published on PyPI and can be installed with:
 
