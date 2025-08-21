@@ -66,7 +66,7 @@ extensions = [
 You can report any issues or bugs on the project's [GitHub
 repository](https://github.com/canonical/sphinx-terminal).
 
-hello-ext is covered by the [Ubuntu Code of
+sphinx-terminal is covered by the [Ubuntu Code of
 Conduct](https://ubuntu.com/community/ethos/code-of-conduct).
 
 ## License and copyright

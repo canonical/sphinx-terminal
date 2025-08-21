@@ -15,7 +15,6 @@
 # program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytest
-from docutils.core import publish_doctree
 from sphinx_terminal.directive import TerminalDirective
 from typing_extensions import override
 
@@ -40,7 +39,7 @@ def fake_terminal_directive(request: pytest.FixtureRequest) -> FakeTerminalDirec
     [{"arguments": ["world"]}],
     indirect=True,
 )
-def test_hello_directive(fake_terminal_directive: FakeTerminalDirective):
+def test_terminal_directive(fake_terminal_directive: FakeTerminalDirective):
     expected = ""
     actual = ""
 

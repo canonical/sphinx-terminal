@@ -13,3 +13,8 @@ Test doc
     :input: echo 'goodbye'
 
     goodbye
+
+.. toctree::
+    :hidden:
+
+    myst-source
