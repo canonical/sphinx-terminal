@@ -73,10 +73,10 @@ class TerminalDirective(SphinxDirective):
         prompt_container["classes"].append("prompt")
         prompt = nodes.literal(text=prompt_text)
         prompt_container.append(prompt)
-
         inpline.append(prompt_container)
+
         inp = nodes.literal(text=command)
-        inp["classes"] = "command"
+        inp["classes"].append("command")
         inpline.append(inp)
         return inpline
 
