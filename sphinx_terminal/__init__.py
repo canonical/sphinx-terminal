@@ -43,8 +43,8 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     common.add_css(app, "terminal.css")
 
     copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
-    app.add_config_value("copybutton_selector", copybutton_classes, "env")
-
+    if "copybutton_selector" not in app.config.values:
+        app.add_config_value("copybutton_selector", copybutton_classes, "env")
     if app.config.copybutton_selector == "div.highlight pre":
         app.config.copybutton_selector = copybutton_classes
 
