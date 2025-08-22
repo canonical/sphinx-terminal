@@ -17,8 +17,6 @@
 import pytest
 from docutils import nodes
 from sphinx import addnodes
-from sphinx_terminal.directive import TerminalDirective
-from typing_extensions import override
 
 TERMINAL_CONTENT = """\
 
@@ -26,31 +24,12 @@ hello
 """
 
 
-class FakeTerminalDirective(TerminalDirective):
-    @override
-    def __init__(self, options, content):
-        self.options = options
-        self.content = content
-
-
-@pytest.fixture
-def fake_terminal_directive(request: pytest.FixtureRequest) -> FakeTerminalDirective:
-    """This fixture can be parametrized to override the default values."""
-    # Get any optional overrides from the fixtures
-    overrides = request.param if hasattr(request, "param") else {}
-
-    return FakeTerminalDirective(
-        options=overrides.get("options", {}),
-        content=overrides.get("content"),
-    )
-
-
 @pytest.mark.parametrize(
     "fake_terminal_directive",
     [{"options": {"input": "echo 'hello'"}, "content": [TERMINAL_CONTENT]}],
     indirect=True,
 )
-def test_terminal_directive(fake_terminal_directive: FakeTerminalDirective):
+def test_terminal_directive(fake_terminal_directive):
     expected = nodes.container()
     expected["classes"] = "terminal"
 
@@ -81,24 +60,101 @@ def test_terminal_directive(fake_terminal_directive: FakeTerminalDirective):
 
     actual = fake_terminal_directive.run()[0]
 
-    print(f"\n\n{str(expected)}\n\n")  # DELETE ME
-    print(f"\n\n{str(actual)}\n\n")  # DELETE ME
+    assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
+            "options": {
+                "user": "author",
+                "host": "canonical",
+                "dir": "~/path",
+                "input": "echo 'hello'",
+            },
+            "content": [TERMINAL_CONTENT],
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_directive_prompt(fake_terminal_directive):
+    expected = nodes.container()
+    expected["classes"] = "terminal"
+
+    highlight = addnodes.highlightlang()
+    highlight["force"] = "False"
+    highlight["lang"] = "text"
+    highlight["linenothreshold"] = "10000"
+    expected.append(highlight)
+
+    input_container = nodes.container()
+    input_container["classes"] = "input"
+
+    prompt_container = nodes.container()
+    prompt_container["classes"] = "prompt"
+    prompt_text = nodes.literal(text="author@canonical:~/path$ ")
+    prompt_container.append(prompt_text)
+    input_container.append(prompt_container)
+
+    command = nodes.literal(text="echo 'hello'")
+    command["classes"] = "command"
+    input_container.append(command)
+    expected.append(input_container)
+
+    output_block = nodes.literal_block(text="\nhello\n")
+    output_block["classes"] = "terminal-code"
+    output_block["xml:space"] = "preserve"
+    expected.append(output_block)
+
+    actual = fake_terminal_directive.run()[0]
 
     assert str(expected) == str(actual)
 
 
-# Expected output
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
+            "options": {
+                "copy": None,
+                "scroll": None,
+                "input": "echo 'hello'",
+            },
+            "content": [TERMINAL_CONTENT],
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_copy_scroll(fake_terminal_directive):
+    expected = nodes.container()
+    expected["classes"] = "terminal copybutton scroll"
 
-# <container classes="terminal copybutton scroll">
-#   <highlightlang force="False" lang="text" linenothreshold="10000"/>
+    highlight = addnodes.highlightlang()
+    highlight["force"] = "False"
+    highlight["lang"] = "text"
+    highlight["linenothreshold"] = "10000"
+    expected.append(highlight)
 
-#   <container classes="input">
-#     <container classes="prompt">
-#       <literal>author@canonical:~/path$ </literal>
-#     </container>
-#     <literal classes="command">echo 'hello'</literal>
-#   </container>
+    input_container = nodes.container()
+    input_container["classes"] = "input"
 
-#   <literal_block classes="terminal-code" xml:space="preserve">
-# hello
-#   </literal_block>
+    prompt_container = nodes.container()
+    prompt_container["classes"] = "prompt"
+    prompt_text = nodes.literal(text="user@host:~$ ")
+    prompt_container.append(prompt_text)
+    input_container.append(prompt_container)
+
+    command = nodes.literal(text="echo 'hello'")
+    command["classes"] = "command"
+    input_container.append(command)
+    expected.append(input_container)
+
+    output_block = nodes.literal_block(text="\nhello\n")
+    output_block["classes"] = "terminal-code"
+    output_block["xml:space"] = "preserve"
+    expected.append(output_block)
+
+    actual = fake_terminal_directive.run()[0]
+
+    assert str(expected) == str(actual)
