@@ -51,7 +51,6 @@ class TerminalDirective(SphinxDirective):
     optional_arguments = 0
     has_content = True
     option_spec = {
-        "class": directives.class_option,
         "input": directives.unchanged,
         "user": directives.unchanged,
         "host": directives.unchanged,
@@ -84,7 +83,6 @@ class TerminalDirective(SphinxDirective):
         """Construct the output of the terminal directive."""
         # if :user: or :host: are provided, replace those in the prompt
 
-        classes = self.options.get("class", "")
         command = self.options.get("input", "")
         user = self.options.get("user", "user")
         host = self.options.get("host", "host")
