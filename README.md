@@ -44,7 +44,7 @@ To enable a copy button for users, include the `:copy:` flag as a directive opti
 
 ```
 
-Similarly, to make the output scrollable, include the `:scroll: flag as a directive option.
+Similarly, to make the output scrollable, include the `:scroll:` flag as a directive option.
 
 ```
 .. terminal::
