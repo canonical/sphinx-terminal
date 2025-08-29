@@ -20,7 +20,7 @@ providing input and output as follows:
 ```
 
 The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
-and :dir: options.
+and `:dir:` options.
 
 ```
 .. terminal::
@@ -38,6 +38,17 @@ To enable a copy button for users, include the `:copy:` flag as a directive opti
 ```
 .. terminal::
     :copy:
+    :input: echo 'hello'
+
+        hello
+
+```
+
+Similarly, to make the output scrollable, include the `:scroll: flag as a directive option.
+
+```
+.. terminal::
+    :scroll:
     :input: echo 'hello'
 
         hello
