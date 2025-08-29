@@ -4,6 +4,7 @@ Test doc
 
 .. terminal::
     :copy:
+    :scroll:
     :user: author
     :host: canonical
     :dir: ~/path

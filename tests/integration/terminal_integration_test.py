@@ -17,6 +17,7 @@
 import shutil
 import subprocess
 from pathlib import Path
+from typing import cast
 
 import bs4
 import pytest
@@ -49,3 +50,28 @@ def test_hello_integration(example_project):
     soup = bs4.BeautifulSoup(index.read_text(), features="lxml")
 
     shutil.rmtree(example_project)  # Delete copied source
+
+    # Ensure that the :copy: and :scroll: options are respected
+    assert soup.find("div", {"class": "terminal copybutton scroll docutils container"})
+
+    # Ensure that the prompt renders correctly
+    prompt_html = soup.find("span", {"class": "pre"})
+    assert getattr(prompt_html, "text", "") == "author@canonical:~/path$"
+
+    # Ensure that the input command renders correctly
+    input_html = soup.find("code", {"class": "command docutils literal notranslate"})
+    if input_html:
+        command = cast(bs4.Tag, input_html).find_all("span", {"class": "pre"})
+        assert getattr(command[0], "text", "") == "echo"
+        assert getattr(command[1], "text", "") == "'hello'"
+    else:
+        pytest.fail("Input command is not rendered in output.")
+
+    output_html = soup.find(
+        "div", {"class": "terminal-code highlight-text notranslate"}
+    )
+    if output_html:
+        output = cast(bs4.Tag, output_html).find_next("pre")
+        assert getattr(output, "text", "") == "hello\n"
+    else:
+        pytest.fail("Command output is not rendered in output.")

@@ -61,10 +61,10 @@ class TerminalDirective(SphinxDirective):
     }
 
     @staticmethod
-    def input_line(prompt_text: str, command: str) -> nodes.container:
+    def input_line(prompt_text: str, command_text: str) -> nodes.container:
         """Construct the prompt with the user-provided options (if any)."""
-        inpline = nodes.container()
-        inpline["classes"].append("input")
+        input_line = nodes.container()
+        input_line["classes"].append("input")
 
         # To let the prompt be styled separately in LaTeX, it needs to be
         # wrapped in a container. This adds an extra div to the HTML output,
@@ -73,12 +73,12 @@ class TerminalDirective(SphinxDirective):
         prompt_container["classes"].append("prompt")
         prompt = nodes.literal(text=prompt_text)
         prompt_container.append(prompt)
-        inpline.append(prompt_container)
+        input_line.append(prompt_container)
 
-        inp = nodes.literal(text=command)
-        inp["classes"].append("command")
-        inpline.append(inp)
-        return inpline
+        command = nodes.literal(text=command_text)
+        command["classes"].append("command")
+        input_line.append(command)
+        return input_line
 
     def run(self) -> list[nodes.Node]:
         """Construct the output of the terminal directive."""
@@ -90,6 +90,7 @@ class TerminalDirective(SphinxDirective):
         host = self.options.get("host", "host")
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
+
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
         elif user and not host:
@@ -106,6 +107,7 @@ class TerminalDirective(SphinxDirective):
             out["classes"].append("copybutton")
         for item in classes:
             out["classes"].append(item)
+
         # The super-large value for linenothreshold is a major hack since I
         # can't figure out how to disable line numbering and the
         # linenothreshold kwarg seems to be required.
