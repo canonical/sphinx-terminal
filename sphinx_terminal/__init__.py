@@ -27,7 +27,7 @@ except ImportError:
     from importlib.metadata import version, PackageNotFoundError
 
     try:
-        __version__ = version("pydantic_kitbash")
+        __version__ = version("sphinx_terminal")
     except PackageNotFoundError:
         __version__ = "dev"
 

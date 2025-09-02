@@ -99,7 +99,7 @@ class TerminalDirective(SphinxDirective):
         else:
             # Omit both user and host, just showing the host
             # doesn't really make sense
-            prompt_text = f"{dir}{user_symbol} "
+            prompt_text = f"{prompt_dir}{user_symbol} "
 
         out = nodes.container()
         out["classes"].append("terminal")

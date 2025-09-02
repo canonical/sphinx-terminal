@@ -1,4 +1,4 @@
-# This file is part of youtube-links.
+# This file is part of sphinx-terminal.
 #
 # Copyright 2025 Canonical Ltd.
 #
