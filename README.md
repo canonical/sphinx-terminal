@@ -1,55 +1,87 @@
-# hello-ext
+# sphinx-terminal
 
-<!-- Answer elevator-pitch questions about the extension – What is it? What does it do? What
-essential problem does it solve? -->
-
-hello-ext adds a Sphinx directive that generates a custom greeting.
+sphinx-terminal allows you to display terminal input and output in your Sphinx
+documentation.
 
 ## Basic usage
 
-<!-- Provide a few examples of the extension's most common use cases. Remember the Pareto
-principle! -->
-
-To generate a greeting, add the `hello` directive to your document:
+To display terminal input and output in your rST document, use the `terminal` directive,
+providing input and output as follows:
 
 ```
-.. hello:: world!
+.. terminal::
+    :input: echo 'hello'
+
+        hello
+    :input: echo 'goodbye'
+
+        goodbye
+
+```
+
+The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
+and `:dir:` options.
+
+```
+.. terminal::
+    :user: author
+    :host: canonical
+    :dir: ~/path
+    :input: echo 'hello'
+
+        hello
+
+```
+
+To enable a copy button for users, include the `:copy:` flag as a directive option.
+
+```
+.. terminal::
+    :copy:
+    :input: echo 'hello'
+
+        hello
+
+```
+
+Similarly, to make the output scrollable, include the `:scroll:` flag as a directive option.
+
+```
+.. terminal::
+    :scroll:
+    :input: echo 'hello'
+
+        hello
+
 ```
 
 ## Project setup
 
-<!-- Provide the simplest way to install the extension. In most cases, this will
-be via `pip`. -->
-
-hello-ext is published on PyPI and can be installed with:
+sphinx-terminal is published on PyPI and can be installed with:
 
 ```bash
-pip install hello-ext
+pip install sphinx-terminal
 ```
 
-After adding hello-ext to your Python project, update your Sphinx's conf.py file to
-include hello-ext as one of its extensions:
+After adding sphinx-terminal to your Python project, update your Sphinx's conf.py file
+to include hello-ext as one of its extensions:
 
 ```python
 extensions = [
-    "hello_ext"
+    "sphinx_terminal"
 ]
 ```
 
 ## Community and support
 
-<!-- This is boilerplate. Replace the extension name and GitHub link. -->
-
 You can report any issues or bugs on the project's [GitHub
-repository](https://github.com/canonical/sphinx-ext-template).
+repository](https://github.com/canonical/sphinx-terminal).
 
-hello-ext is covered by the [Ubuntu Code of
+sphinx-terminal is covered by the [Ubuntu Code of
 Conduct](https://ubuntu.com/community/ethos/code-of-conduct).
 
 ## License and copyright
 
-<!-- Replace the extension name and, if necessary, the extension's license. -->
-
-hello-ext is released under the [GPL-3.0 license](LICENSE).
+sphinx-terminal is released under the [GPL-3.0 license](LICENSE).
 
 © 2025 Canonical Ltd.
