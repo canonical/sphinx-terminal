@@ -24,6 +24,7 @@ project = "Mock"
 author = "Tester"
 
 html_title = project
+html_theme = "furo"
 
 extensions = [
     "sphinx_terminal",
