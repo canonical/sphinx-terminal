@@ -1,6 +1,25 @@
 # Myst multi line
 
-Option based multiline
+Initial multiline
+
+````
+```{terminal}
+:copy:
+:user: author
+:host: canonical
+:dir: ~/path
+:input: echo 'hello'
+
+:multi: echo 'more'
+:multi: echo 'goodbye'
+
+hello
+more
+goodbye
+```
+````
+
+Becomes:
 
 ```{terminal}
 :copy:
