@@ -12,6 +12,8 @@ Option based multiline
 :multi: echo 'more'
 :multi: echo 'goodbye'
 
+hello
+more
 goodbye
 ```
 
@@ -31,4 +33,6 @@ hello
 :multi: echo 'even more'
 
 goodbye
+more
+even more
 ```

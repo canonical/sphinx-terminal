@@ -13,12 +13,11 @@ Initial multiline
 
     :multi: echo 'something'
     :multi: echo 'something more'
-
     hello
-    :input: echo 'goodbye'
+    something
+    something more
 
-    goodbye
-    goodbye
+    :input: echo 'goodbye'
     goodbye
 
 Best not to stack inputs:
