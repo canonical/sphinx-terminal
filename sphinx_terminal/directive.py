@@ -29,19 +29,42 @@ def parse_contents(contents: StringList) -> list[list[str]]:
     This is to differentiate between input and output lines in
     the directive's content.
     """
+    command_input: list[str] = []
     command_output: list[str] = []
     out: list[list[str]] = []
+
+    print(f"contents input: {contents}")
 
     for line in contents:
         if line.startswith(":input: "):
             out.append(command_output)
-            out.append([line])
             command_output = []
+            command_input.append(line)
+        elif line.startswith(":multi: "):
+            if command_input == []:
+                raise SphinxTerminalError(
+                    ":multi: terminal line not used directly after input line"
+                )
+            command_input.append(line[len(":multi: ") :])
         else:
+            if command_input != []:
+                out.append(command_input)
+            command_input = []
             command_output.append(line)
 
     out.append(command_output)
+    print(f"contents output {out}")
     return out
+
+
+class SphinxTerminalError(Exception):
+    """Exception class for Sphinx Terminal."""
+
+
+class SphinxTerminalInput(nodes.literal):
+    """Custom class for line broken inline literals."""
+
+    child_text_separator = "\n\n"
 
 
 class TerminalDirective(SphinxDirective):
@@ -56,13 +79,20 @@ class TerminalDirective(SphinxDirective):
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
+        "multi": directives.unchanged,
         "scroll": directives.flag,
         "copy": directives.flag,
     }
 
     @staticmethod
-    def input_line(prompt_text: str, command_text: str) -> nodes.container:
+    def input_line(
+        prompt_text: str, command_text: str, *multi_lines: str
+    ) -> nodes.container:
         """Construct the prompt with the user-provided options (if any)."""
+        print(
+            f"prompt_text: {prompt_text}, command_text: {command_text}, *multi_lines: {multi_lines}"
+        )
+
         input_line = nodes.container()
         input_line["classes"].append("input")
 
@@ -71,13 +101,17 @@ class TerminalDirective(SphinxDirective):
         # but what's a few bytes between friends?
         prompt_container = nodes.container()
         prompt_container["classes"].append("prompt")
+
         prompt = nodes.literal(text=prompt_text)
         prompt_container.append(prompt)
         input_line.append(prompt_container)
 
-        command = nodes.literal(text=command_text)
-        command["classes"].append("command")
+        command = SphinxTerminalInput(text=command_text)
         input_line.append(command)
+
+        for line in multi_lines:
+            input_line.append(SphinxTerminalInput(text=f"    {line}"))
+
         return input_line
 
     def run(self) -> list[nodes.Node]:
@@ -90,6 +124,9 @@ class TerminalDirective(SphinxDirective):
         host = self.options.get("host", "host")
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
+
+        # Set number of input lines
+        multi_line = self.options.get("multi", 0)
 
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
@@ -119,17 +156,26 @@ class TerminalDirective(SphinxDirective):
 
         # Add the original prompt and input
 
-        out.append(self.input_line(prompt_text, command))
+        input_lines: list[str] = [self.content.pop(0) for _ in range(int(multi_line))]
+
+        print(
+            f"out.append(self.input_line(prompt_text, command)): prompt: {prompt_text}, command: {command}, input_lines: {input_lines}"
+        )
+        print(f"remaining content: {self.content}")
+        out.append(self.input_line(prompt_text, command, *input_lines))
+        parsed_content = parse_contents(self.content)
 
         # Go through the content and append all lines as output
         # except for the ones that start with ":input: " - those get
         # a prompt
 
-        parsed_content = parse_contents(self.content)
-
         for blob in filter(None, parsed_content):
+            print(f"examining blob: {blob}")
+
             if blob[0].startswith(":input: "):
-                out.append(self.input_line(prompt_text, blob[0][len(":input: ") :]))
+                out.append(
+                    self.input_line(prompt_text, blob[0][len(":input: ") :], *blob[1:])
+                )
             else:
                 output = nodes.literal_block(text="\n".join(blob))
                 output["classes"].append("terminal-code")

@@ -21,6 +21,14 @@
   padding: 0 0.4rem 0 0.875rem;
 }
 
+.terminal .input .literal {
+  white-space-collapse: break-spaces;
+}
+
+.terminal code::after {
+  content: "\A";
+}
+
 .terminal .input .prompt {
   display: inline-block;
   font-weight: bold;
