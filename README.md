@@ -55,6 +55,35 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
 
 ```
 
+### Multiline input
+
+Content lines starting with `:multi:` following an input line (in content, or
+following the configuration) will result in multi-line input that can be copied
+with the copy-button extension.
+
+For example, following the input provided by the configuration:
+
+```
+.. terminal::
+    :scroll:
+    :input: echo 'hello'
+
+    :multi: echo 'hello again!'
+```
+
+And, following an input line in the content of the terminal:
+
+```
+.. terminal::
+    :scroll:
+    :input: echo 'hello'
+
+    hello
+
+    :input: echo 'hello again...'
+    :multi: echo 'and one more!'
+```
+
 ## Project setup
 
 sphinx-terminal is published on PyPI and can be installed with:

@@ -21,6 +21,8 @@ Initial multiline
     goodbye
     goodbye
 
+Best not to stack inputs:
+
 .. terminal::
     :copy:
     :scroll:

@@ -33,8 +33,6 @@ def parse_contents(contents: StringList) -> list[list[str]]:
     command_output: list[str] = []
     out: list[list[str]] = []
 
-    print(f"contents input: {contents}")
-
     for line in contents:
         if line.startswith(":input: "):
             out.append(command_output)
@@ -53,7 +51,6 @@ def parse_contents(contents: StringList) -> list[list[str]]:
             command_output.append(line)
 
     out.append(command_output)
-    print(f"contents output {out}")
     return out
 
 
@@ -88,10 +85,6 @@ class TerminalDirective(SphinxDirective):
         prompt_text: str, command_text: str, *multi_lines: str
     ) -> nodes.container:
         """Construct the prompt with the user-provided options (if any)."""
-        print(
-            f"prompt_text: {prompt_text}, command_text: {command_text}, *multi_lines: {multi_lines}"
-        )
-
         input_line = nodes.container()
         input_line["classes"].append("input")
 
@@ -114,7 +107,6 @@ class TerminalDirective(SphinxDirective):
         command["classes"].append("command")
 
         input_line.append(command)
-        print(f"terminal lines: {input_line}")
         return input_line
 
     def run(self) -> list[nodes.Node]:
@@ -172,8 +164,6 @@ class TerminalDirective(SphinxDirective):
         # a prompt
 
         for blob in filter(None, parsed_content):
-            print(f"examining blob: {blob}")
-
             if blob[0].startswith(":input: "):
                 out.append(
                     self.input_line(prompt_text, blob[0][len(":input: ") :], *blob[1:])
