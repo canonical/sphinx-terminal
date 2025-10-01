@@ -42,7 +42,7 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     app.add_directive("terminal", TerminalDirective)
     common.add_css(app, "terminal.css")
 
-    copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
+    copybutton_classes = "span.command"
 
     if "copybutton_selector" not in app.config.values:
         app.add_config_value("copybutton_selector", copybutton_classes, "html")

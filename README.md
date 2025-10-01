@@ -55,6 +55,12 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
 
 ```
 
+### Copybutton support
+
+When used in combination with [sphinx-copybutton](https://github.com/executablebooks/sphinx-copybutton)
+ensure that `sphinx_copybutton` is higher in the `extensions` list than
+`sphinx_terminal`.
+
 ### Multiline input
 
 Content lines starting with `:multi:` following an input line (in content, or
