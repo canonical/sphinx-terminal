@@ -106,12 +106,15 @@ class TerminalDirective(SphinxDirective):
         prompt_container.append(prompt)
         input_line.append(prompt_container)
 
-        command = SphinxTerminalInput(text=command_text)
-        input_line.append(command)
+        command = nodes.inline()
+
+        command.append(SphinxTerminalInput(text=command_text))
 
         for line in multi_lines:
-            input_line.append(SphinxTerminalInput(text=f"    {line}"))
+            command.append(SphinxTerminalInput(text=f"    {line}"))
+        command["classes"].append("command")
 
+        input_line.append(command)
         return input_line
 
     def run(self) -> list[nodes.Node]:
