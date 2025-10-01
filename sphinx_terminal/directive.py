@@ -64,7 +64,7 @@ class SphinxTerminalError(Exception):
 class SphinxTerminalInput(nodes.literal):
     """Custom class for line broken inline literals."""
 
-    child_text_separator = "\n\n"
+    # Initially used for child_text_separator overrides
 
 
 class TerminalDirective(SphinxDirective):
@@ -111,10 +111,11 @@ class TerminalDirective(SphinxDirective):
         command.append(SphinxTerminalInput(text=command_text))
 
         for line in multi_lines:
-            command.append(SphinxTerminalInput(text=f"    {line}"))
+            command.append(SphinxTerminalInput(text=f"\n{line}"))
         command["classes"].append("command")
 
         input_line.append(command)
+        print(f"terminal lines: {input_line}")
         return input_line
 
     def run(self) -> list[nodes.Node]:
@@ -129,7 +130,7 @@ class TerminalDirective(SphinxDirective):
         user_symbol = "#" if user == "root" else "$"
 
         # Set number of input lines
-        multi_line = self.options.get("multi", 0)
+        num_multi = self.options.get("multi", 0)
 
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
@@ -159,7 +160,7 @@ class TerminalDirective(SphinxDirective):
 
         # Add the original prompt and input
 
-        input_lines: list[str] = [self.content.pop(0) for _ in range(int(multi_line))]
+        input_lines: list[str] = [self.content.pop(0) for _ in range(int(num_multi))]
 
         print(
             f"out.append(self.input_line(prompt_text, command)): prompt: {prompt_text}, command: {command}, input_lines: {input_lines}"

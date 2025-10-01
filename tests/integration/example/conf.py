@@ -27,6 +27,9 @@ html_title = project
 html_theme = "furo"
 
 extensions = [
+    "sphinx_copybutton",
     "sphinx_terminal",
     "myst_parser",
 ]
+
+copybutton_selector = "span.command"

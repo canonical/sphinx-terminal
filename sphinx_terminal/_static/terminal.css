@@ -25,10 +25,6 @@
   white-space-collapse: break-spaces;
 }
 
-.terminal code::after {
-  content: "\A";
-}
-
 .terminal .input .prompt {
   display: inline-block;
   font-weight: bold;

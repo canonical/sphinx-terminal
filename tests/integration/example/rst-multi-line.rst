@@ -19,8 +19,13 @@ Initial multiline
     :input: echo 'goodbye'
 
     goodbye
+    goodbye
+    goodbye
 
-Content multiline
+What is happening?
+Why is the line above me not there?
+
+The entire paragraph is getting eaten... Hmm.
 
 Why?
 
@@ -31,6 +36,11 @@ Why?
     :host: canonical
     :dir: ~/path
     :input: echo 'hello'
+    :multi: 3
+
+    echo 'more'
+
+    echo 'even more!'
 
     hello
 
@@ -38,3 +48,7 @@ Why?
     :multi: 'something more'
 
     goodbye
+
+.. why
+
+I'm very confused.
