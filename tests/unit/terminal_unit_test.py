@@ -17,6 +17,7 @@
 import pytest
 from docutils import nodes
 from sphinx import addnodes
+from sphinx_terminal.directive import SphinxTerminalInput
 
 
 @pytest.mark.parametrize(
@@ -43,9 +44,11 @@ def test_terminal_directive(fake_terminal_directive):
     prompt_container.append(prompt_text)
     input_container.append(prompt_container)
 
-    command = nodes.literal(text="echo 'hello'")
-    command["classes"] = "command"
-    input_container.append(command)
+    command_container = nodes.inline()
+    command_container["classes"] = "command"
+    command = SphinxTerminalInput(text="echo 'hello'")
+    command_container.append(command)
+    input_container.append(command_container)
     expected.append(input_container)
 
     output_block = nodes.literal_block(text="\nhello\n")
@@ -92,9 +95,11 @@ def test_terminal_directive_prompt(fake_terminal_directive):
     prompt_container.append(prompt_text)
     input_container.append(prompt_container)
 
-    command = nodes.literal(text="echo 'hello'")
-    command["classes"] = "command"
-    input_container.append(command)
+    command_container = nodes.inline()
+    command_container["classes"] = "command"
+    command = SphinxTerminalInput(text="echo 'hello'")
+    command_container.append(command)
+    input_container.append(command_container)
     expected.append(input_container)
 
     output_block = nodes.literal_block(text="\nhello\n")
@@ -140,9 +145,11 @@ def test_terminal_copy_scroll(fake_terminal_directive):
     prompt_container.append(prompt_text)
     input_container.append(prompt_container)
 
-    command = nodes.literal(text="echo 'hello'")
-    command["classes"] = "command"
-    input_container.append(command)
+    command_container = nodes.inline()
+    command_container["classes"] = "command"
+    command = SphinxTerminalInput(text="echo 'hello'")
+    command_container.append(command)
+    input_container.append(command_container)
     expected.append(input_container)
 
     output_block = nodes.literal_block(text="\nhello\n")
@@ -184,9 +191,11 @@ def test_terminal_class_option(fake_terminal_directive):
     prompt_container.append(prompt_text)
     input_container.append(prompt_container)
 
-    command = nodes.literal(text="echo 'hello'")
-    command["classes"] = "command"
-    input_container.append(command)
+    command_container = nodes.inline()
+    command_container["classes"] = "command"
+    command = SphinxTerminalInput(text="echo 'hello'")
+    command_container.append(command)
+    input_container.append(command_container)
     expected.append(input_container)
 
     output_block = nodes.literal_block(text="\nhello\n")
