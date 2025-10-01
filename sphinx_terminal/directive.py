@@ -79,7 +79,6 @@ class TerminalDirective(SphinxDirective):
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
-        "multi": directives.unchanged,
         "scroll": directives.flag,
         "copy": directives.flag,
     }
@@ -129,9 +128,6 @@ class TerminalDirective(SphinxDirective):
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
 
-        # Set number of input lines
-        num_multi = self.options.get("multi", 0)
-
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
         elif user and not host:
@@ -158,16 +154,18 @@ class TerminalDirective(SphinxDirective):
         if "scroll" in self.options:
             out["classes"].append("scroll")
 
+        # Check initial multi line input
+        multi_line: list[str] = []
+        for i in range(len(self.content)):
+            if self.content[i].startswith(":multi: "):
+                multi_line.append(self.content[i][len(":multi: ") :])
+            else:
+                break
+
         # Add the original prompt and input
+        out.append(self.input_line(prompt_text, command, *multi_line))
 
-        input_lines: list[str] = [self.content.pop(0) for _ in range(int(num_multi))]
-
-        print(
-            f"out.append(self.input_line(prompt_text, command)): prompt: {prompt_text}, command: {command}, input_lines: {input_lines}"
-        )
-        print(f"remaining content: {self.content}")
-        out.append(self.input_line(prompt_text, command, *input_lines))
-        parsed_content = parse_contents(self.content)
+        parsed_content = parse_contents(self.content[len(multi_line) :])
 
         # Go through the content and append all lines as output
         # except for the ones that start with ":input: " - those get

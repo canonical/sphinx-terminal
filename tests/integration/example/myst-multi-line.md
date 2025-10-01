@@ -8,10 +8,9 @@ Option based multiline
 :host: canonical
 :dir: ~/path
 :input: echo 'hello'
-:multi: 2
 
-echo 'more'
-echo 'goodbye'
+:multi: echo 'more'
+:multi: echo 'goodbye'
 
 goodbye
 ```
