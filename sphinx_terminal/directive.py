@@ -50,7 +50,10 @@ def parse_contents(contents: StringList) -> list[list[str]]:
             command_input = []
             command_output.append(line)
 
-    out.append(command_output)
+    if command_input != []:
+        out.append(command_input)
+    if command_output != []:
+        out.append(command_output)
     return out
 
 

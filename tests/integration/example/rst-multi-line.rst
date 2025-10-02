@@ -34,6 +34,4 @@ Best not to stack inputs:
     :multi: echo 'even more!'
 
     :input: echo 'goodbye'
-    :multi: 'something more'
-
-    goodbye
+    :multi: echo 'something more'
