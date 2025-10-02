@@ -251,19 +251,14 @@ def test_terminal_multiline(fake_terminal_directive):
 
     body_multiline_input = nodes.container()
     body_multiline_input["classes"] = "input"
-
     prompt_container = nodes.container()
     prompt_container["classes"].append("prompt")
     prompt_container.append(prompt_text)
-
     body_multiline_input.append(prompt_container)
-
     command = nodes.inline()
     command.append(SphinxTerminalInput(text="echo 'test'"))
-
     command.append(SphinxTerminalInput(text=f"\necho 'more test'"))
     command["classes"].append("command")
-
     body_multiline_input.append(command)
     expected.append(body_multiline_input)
 
