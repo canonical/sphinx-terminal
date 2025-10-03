@@ -10,14 +10,14 @@ providing input and output as follows:
 
 ```
 .. terminal::
-    :input: echo 'hello'
 
-        hello
-    :input: echo 'goodbye'
+    input
 
-        goodbye
-
+    output
 ```
+
+Multiple input lines can be used, as long as they are in the same paragraph.
+They will automatically be indented in the HTML output.
 
 The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
 and `:dir:` options.
@@ -27,21 +27,22 @@ and `:dir:` options.
     :user: author
     :host: canonical
     :dir: ~/path
-    :input: echo 'hello'
 
-        hello
+    echo 'hello'
 
+    hello
 ```
 
 To enable a copy button for users, include the `:copy:` flag as a directive option.
+Only the input will be available to copy.
 
 ```
 .. terminal::
     :copy:
-    :input: echo 'hello'
 
-        hello
+    echo 'hello'
 
+    hello
 ```
 
 Similarly, to make the output scrollable, include the `:scroll:` flag as a directive option.
@@ -49,10 +50,21 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
 ```
 .. terminal::
     :scroll:
-    :input: echo 'hello'
 
-        hello
+    echo 'hello'
 
+    hello
+```
+
+### No input command
+
+Use the `:noinput:` option to prevent any text from being interpreted as a command input:
+
+```
+.. terminal::
+    :noinput:
+
+    output
 ```
 
 ### Copybutton support
@@ -60,35 +72,6 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
 When used in combination with [sphinx-copybutton](https://github.com/executablebooks/sphinx-copybutton)
 ensure that `sphinx_copybutton` is higher in the `extensions` list than
 `sphinx_terminal`.
-
-### Multiline input
-
-Content lines starting with `:multi:` following an input line (in content, or
-following the configuration) will result in multi-line input that can be copied
-with the copy-button extension.
-
-For example, following the input provided by the configuration:
-
-```
-.. terminal::
-    :scroll:
-    :input: echo 'hello'
-
-    :multi: echo 'hello again!'
-```
-
-And, following an input line in the content of the terminal:
-
-```
-.. terminal::
-    :scroll:
-    :input: echo 'hello'
-
-    hello
-
-    :input: echo 'hello again...'
-    :multi: echo 'and one more!'
-```
 
 ## Project setup
 
