@@ -1,7 +1,8 @@
-RST multi line
-==============
+RST additional options
+======================
 
-Initial multiline
+Multi-line
+----------
 
 .. terminal::
     :copy:
@@ -9,18 +10,29 @@ Initial multiline
     :user: author
     :host: canonical
     :dir: ~/path
-    :input: echo 'hello'
 
-    :multi: echo 'something'
-    :multi: echo 'something more'
-    hello
+    echo 'more'
+    echo 'even more!'
+
+    more
+    even more!
+
+No input
+--------
+
+.. terminal::
+    :copy:
+    :scroll:
+    :user: author
+    :host: canonical
+    :dir: ~/path
+    :noinput:
+
     something
     something more
 
-    :input: echo 'goodbye'
-    goodbye
-
-Best not to stack inputs:
+No output
+---------
 
 .. terminal::
     :copy:
@@ -28,10 +40,6 @@ Best not to stack inputs:
     :user: author
     :host: canonical
     :dir: ~/path
-    :input: echo 'hello'
 
-    :multi: echo 'more'
-    :multi: echo 'even more!'
-
-    :input: echo 'goodbye'
-    :multi: echo 'something more'
+    echo 'something'
+    echo 'something more'

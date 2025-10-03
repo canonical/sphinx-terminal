@@ -1,57 +1,43 @@
-# Myst multi line
+# Myst additional options
 
-Initial multiline
+## Multi-line
 
-````
 ```{terminal}
 :copy:
 :user: author
 :host: canonical
 :dir: ~/path
-:input: echo 'hello'
 
-:multi: echo 'more'
-:multi: echo 'goodbye'
+echo 'goodbye'
+echo 'more'
 
-hello
-more
 goodbye
+more
 ```
-````
 
-Becomes:
+## No input
 
 ```{terminal}
 :copy:
 :user: author
 :host: canonical
 :dir: ~/path
-:input: echo 'hello'
-
-:multi: echo 'more'
-:multi: echo 'goodbye'
+:noinput:
 
 hello
 more
 goodbye
 ```
 
-Mid content multiline
+## No output
 
 ```{terminal}
 :copy:
 :user: author
 :host: canonical
 :dir: ~/path
-:input: echo 'hello'
 
-hello
-
-:input: echo 'goodbye'
-:multi: echo 'more'
-:multi: echo 'even more'
-
-goodbye
-more
-even more
+echo 'hello'
+echo 'more'
+echo 'goodbye'
 ```

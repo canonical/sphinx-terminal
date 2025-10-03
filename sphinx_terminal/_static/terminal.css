@@ -20,6 +20,7 @@
   display: block;
   padding: 0 0.4rem 0 0.875rem;
   line-height: 1;
+  min-height: 1.3em;
 }
 
 .terminal .input .literal {
@@ -31,6 +32,10 @@
   display: inline-block;
   font-weight: bold;
   color: yellowgreen;
+}
+
+.terminal span.command code.literal + code.literal {
+  padding-left: 4em;
 }
 
 .terminal.scroll .input,

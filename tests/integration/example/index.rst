@@ -8,12 +8,10 @@ Test doc
     :user: author
     :host: canonical
     :dir: ~/path
-    :input: echo 'hello'
+
+    echo 'hello'
 
     hello
-    :input: echo 'goodbye'
-
-    goodbye
 
 .. toctree::
     :hidden:
