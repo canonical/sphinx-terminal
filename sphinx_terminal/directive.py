@@ -23,6 +23,133 @@ from sphinx import addnodes
 from sphinx.util.docutils import SphinxDirective
 
 
+class TerminalDirective(SphinxDirective):
+    """Define the terminal directive's state and behavior."""
+
+    required_arguments = 0
+    optional_arguments = 0
+    has_content = True
+    option_spec = {
+        "class": directives.class_option,
+        "user": directives.unchanged,
+        "host": directives.unchanged,
+        "dir": directives.unchanged,
+        "noinput": directives.flag,
+        "scroll": directives.flag,
+        "copy": directives.flag,
+        "input": directives.unchanged,  # deprecated
+    }
+
+    @staticmethod
+    def input_line(prompt_text: str, commands: list[str]) -> nodes.container:
+        """Construct the prompt with the user-provided options (if any)."""
+        input_line = nodes.container()
+        input_line["classes"].append("input")
+
+        # To let the prompt be styled separately in LaTeX, it needs to be
+        # wrapped in a container. This adds an extra div to the HTML output,
+        # but what's a few bytes between friends?
+        prompt_container = nodes.container()
+        prompt_container["classes"].append("prompt")
+
+        prompt = nodes.literal(text=prompt_text)
+        prompt_container.append(prompt)
+        input_line.append(prompt_container)
+
+        command = nodes.inline()
+
+        for line in commands:
+            command.append(nodes.literal(text=f"{line}\n"))
+
+        command["classes"].append("command")
+
+        input_line.append(command)
+        return input_line
+
+    def run(self) -> list[nodes.Node]:
+        """Construct the output of the terminal directive."""
+        # if :user: or :host: are provided, replace those in the prompt
+
+        classes = self.options.get("class", "")
+        user = self.options.get("user", "user")
+        host = self.options.get("host", "host")
+        prompt_dir = self.options.get("dir", "~")
+        user_symbol = "#" if user == "root" else "$"
+        commands = "noinput" not in self.options
+
+        if user and host:
+            prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
+        elif user and not host:
+            # Only the user is supplied
+            prompt_text = f"{user}:{prompt_dir}{user_symbol} "
+        else:
+            # Omit both user and host, just showing the host
+            # doesn't really make sense
+            prompt_text = f"{prompt_dir}{user_symbol} "
+
+        out = nodes.container()
+        out["classes"].append("terminal")
+        if "copy" in self.options:
+            out["classes"].append("copybutton")
+        for item in classes:
+            out["classes"].append(item)
+        if "scroll" in self.options:
+            out["classes"].append("scroll")
+
+        # The super-large value for linenothreshold is a major hack since I
+        # can't figure out how to disable line numbering and the
+        # linenothreshold kwarg seems to be required.
+        out.append(
+            addnodes.highlightlang(lang="text", force=False, linenothreshold=10000)
+        )
+
+        if "input" in self.options:
+            out.append(self.input_line(prompt_text, [self.options.get("input", "")]))
+
+            for blob in filter(None, parse_contents(self.content)):
+                if blob[0].startswith(":input: "):
+                    out.append(
+                        self.input_line(prompt_text, [blob[0][len(":input: ") :]])
+                    )
+                else:
+                    output = nodes.literal_block(text="\n".join(blob))
+                    output["classes"].append("terminal-code")
+                    out.append(output)
+        else:
+            # Split inputs and output
+            input_lines: list[str] = []
+            output_lines: list[str] = []
+
+            # Add the prompt and input
+            for line in self.content:
+                if commands:
+                    input_lines += [line]
+                    if not line.strip():
+                        commands = False
+                        input_lines = [input_lines[0]] + ["> " + line for line in input_lines[1:-1]]
+                        out.append(self.input_line(prompt_text, input_lines))
+                        input_lines = []
+                else:
+                    output_lines += [line]
+                    if not line.strip() and "noinput" not in self.options:
+                        commands = True
+                        output = nodes.literal_block(text="\n".join(output_lines))
+                        output["classes"].append("terminal-code")
+                        out.append(output)
+                        output_lines = []
+
+            if input_lines:
+                out.append(self.input_line(prompt_text, input_lines))
+
+            # Add output lines
+            if output_lines:
+                output = nodes.literal_block(text="\n".join(output_lines))
+                output["classes"].append("terminal-code")
+                out.append(output)
+
+        return [out]
+
+
 def parse_contents(contents: StringList) -> list[list[str]]:
     """Parse the directive's content.
 
@@ -42,96 +169,3 @@ def parse_contents(contents: StringList) -> list[list[str]]:
 
     out.append(command_output)
     return out
-
-
-class TerminalDirective(SphinxDirective):
-    """Define the terminal directive's state and behavior."""
-
-    required_arguments = 0
-    optional_arguments = 0
-    has_content = True
-    option_spec = {
-        "class": directives.class_option,
-        "input": directives.unchanged,
-        "user": directives.unchanged,
-        "host": directives.unchanged,
-        "dir": directives.unchanged,
-        "scroll": directives.flag,
-        "copy": directives.flag,
-    }
-
-    @staticmethod
-    def input_line(prompt_text: str, command_text: str) -> nodes.container:
-        """Construct the prompt with the user-provided options (if any)."""
-        input_line = nodes.container()
-        input_line["classes"].append("input")
-
-        # To let the prompt be styled separately in LaTeX, it needs to be
-        # wrapped in a container. This adds an extra div to the HTML output,
-        # but what's a few bytes between friends?
-        prompt_container = nodes.container()
-        prompt_container["classes"].append("prompt")
-        prompt = nodes.literal(text=prompt_text)
-        prompt_container.append(prompt)
-        input_line.append(prompt_container)
-
-        command = nodes.literal(text=command_text)
-        command["classes"].append("command")
-        input_line.append(command)
-        return input_line
-
-    def run(self) -> list[nodes.Node]:
-        """Construct the output of the terminal directive."""
-        # if :user: or :host: are provided, replace those in the prompt
-
-        classes = self.options.get("class", "")
-        command = self.options.get("input", "")
-        user = self.options.get("user", "user")
-        host = self.options.get("host", "host")
-        prompt_dir = self.options.get("dir", "~")
-        user_symbol = "#" if user == "root" else "$"
-
-        if user and host:
-            prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
-        elif user and not host:
-            # Only the user is supplied
-            prompt_text = f"{user}:{prompt_dir}{user_symbol} "
-        else:
-            # Omit both user and host, just showing the host
-            # doesn't really make sense
-            prompt_text = f"{prompt_dir}{user_symbol} "
-
-        out = nodes.container()
-        out["classes"].append("terminal")
-        if "copy" in self.options:
-            out["classes"].append("copybutton")
-        for item in classes:
-            out["classes"].append(item)
-
-        # The super-large value for linenothreshold is a major hack since I
-        # can't figure out how to disable line numbering and the
-        # linenothreshold kwarg seems to be required.
-        out.append(
-            addnodes.highlightlang(lang="text", force=False, linenothreshold=10000)
-        )
-        if "scroll" in self.options:
-            out["classes"].append("scroll")
-
-        # Add the original prompt and input
-
-        out.append(self.input_line(prompt_text, command))
-
-        # Go through the content and append all lines as output
-        # except for the ones that start with ":input: " - those get
-        # a prompt
-
-        parsed_content = parse_contents(self.content)
-
-        for blob in filter(None, parsed_content):
-            if blob[0].startswith(":input: "):
-                out.append(self.input_line(prompt_text, blob[0][len(":input: ") :]))
-            else:
-                output = nodes.literal_block(text="\n".join(blob))
-                output["classes"].append("terminal-code")
-                out.append(output)
-        return [out]

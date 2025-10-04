@@ -15,6 +15,18 @@ Test doc
 
     goodbye
 
+.. terminal::
+    
+    input-line-1
+    input-line-2
+
+    output-line-1
+    output-line-2
+
+    input-line-3
+
+    output-line3
+
 .. toctree::
     :hidden:
 
