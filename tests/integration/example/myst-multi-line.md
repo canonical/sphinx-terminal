@@ -1,0 +1,57 @@
+# Myst multi line
+
+Initial multiline
+
+````
+```{terminal}
+:copy:
+:user: author
+:host: canonical
+:dir: ~/path
+:input: echo 'hello'
+
+:multi: echo 'more'
+:multi: echo 'goodbye'
+
+hello
+more
+goodbye
+```
+````
+
+Becomes:
+
+```{terminal}
+:copy:
+:user: author
+:host: canonical
+:dir: ~/path
+:input: echo 'hello'
+
+:multi: echo 'more'
+:multi: echo 'goodbye'
+
+hello
+more
+goodbye
+```
+
+Mid content multiline
+
+```{terminal}
+:copy:
+:user: author
+:host: canonical
+:dir: ~/path
+:input: echo 'hello'
+
+hello
+
+:input: echo 'goodbye'
+:multi: echo 'more'
+:multi: echo 'even more'
+
+goodbye
+more
+even more
+```

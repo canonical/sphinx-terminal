@@ -19,3 +19,5 @@ Test doc
     :hidden:
 
     myst-source
+    rst-multi-line
+    myst-multi-line
