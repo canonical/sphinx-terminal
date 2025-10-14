@@ -59,7 +59,7 @@ def test_hello_integration(example_project):
     assert getattr(prompt_html, "text", "") == "author@canonical:~/path$"
 
     # Ensure that the input command renders correctly
-    input_html = soup.find("code", {"class": "command docutils literal notranslate"})
+    input_html = soup.find("span", {"class": "command"})
     if input_html:
         command = cast(bs4.Tag, input_html).find_all("span", {"class": "pre"})
         assert getattr(command[0], "text", "") == "echo"
