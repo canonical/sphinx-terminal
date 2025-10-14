@@ -118,8 +118,8 @@ class TerminalDirective(SphinxDirective):
             out["classes"].append("scroll")
 
         # Add the original prompt and input
-
-        out.append(self.input_line(prompt_text, command))
+        if command:
+            out.append(self.input_line(prompt_text, command))
 
         # Go through the content and append all lines as output
         # except for the ones that start with ":input: " - those get

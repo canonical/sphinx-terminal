@@ -65,7 +65,7 @@ def test_hello_integration(example_project):
         assert getattr(command[0], "text", "") == "echo"
         assert getattr(command[1], "text", "") == "'hello'"
     else:
-        pytest.fail("Input command is not rendered in output.")
+        pytest.fail("Input command isn't present in rendered output.")
 
     output_html = soup.find(
         "div", {"class": "terminal-code highlight-text notranslate"}
@@ -75,3 +75,9 @@ def test_hello_integration(example_project):
         assert getattr(output, "text", "") == "hello\n"
     else:
         pytest.fail("Command output is not rendered in output.")
+
+    # Ensure that the prompt isn't inserted without an initial input line
+    input_html = soup.find_next(
+        "code", {"class": "command docutils literal notranslate"}
+    )
+    assert not input_html

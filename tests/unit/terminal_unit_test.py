@@ -111,6 +111,36 @@ def test_terminal_directive_prompt(fake_terminal_directive):
     "fake_terminal_directive",
     [
         {
+            "options": {},
+            "content": ["\nhello\n"],
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_directive_no_input(fake_terminal_directive):
+    expected = nodes.container()
+    expected["classes"] = "terminal"
+
+    highlight = addnodes.highlightlang()
+    highlight["force"] = "False"
+    highlight["lang"] = "text"
+    highlight["linenothreshold"] = "10000"
+    expected.append(highlight)
+
+    output_block = nodes.literal_block(text="\nhello\n")
+    output_block["classes"] = "terminal-code"
+    output_block["xml:space"] = "preserve"
+    expected.append(output_block)
+
+    actual = fake_terminal_directive.run()[0]
+
+    assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
             "options": {
                 "copy": None,
                 "scroll": None,
