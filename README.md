@@ -12,10 +12,10 @@ providing input and output as follows:
 .. terminal::
     :input: echo 'hello'
 
-        hello
+    hello
     :input: echo 'goodbye'
 
-        goodbye
+    goodbye
 
 ```
 
@@ -29,7 +29,7 @@ and `:dir:` options.
     :dir: ~/path
     :input: echo 'hello'
 
-        hello
+    hello
 
 ```
 
@@ -40,7 +40,7 @@ To enable a copy button for users, include the `:copy:` flag as a directive opti
     :copy:
     :input: echo 'hello'
 
-        hello
+    hello
 
 ```
 
@@ -51,7 +51,7 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
     :scroll:
     :input: echo 'hello'
 
-        hello
+    hello
 
 ```
 
