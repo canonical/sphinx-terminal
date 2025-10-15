@@ -2,30 +2,34 @@
 Test doc
 ========
 
+Single input:
+
 .. terminal::
     :copy:
-    :scroll:
-    :user: author
-    :host: canonical
-    :dir: ~/path
-    :input: echo 'hello'
 
-    hello
-    :input: echo 'goodbye'
+    input
 
-    goodbye
+    output
+
+Multiline input:
 
 .. terminal::
-    
-    input-line-1
+    :copy:
+
+    input-line-1 \
     input-line-2
 
     output-line-1
     output-line-2
 
-    input-line-3
+Output only:
 
-    output-line3
+.. terminal::
+    :output-only:
+
+    output-line-1
+
+    output-line-2
 
 .. toctree::
     :hidden:

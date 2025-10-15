@@ -34,7 +34,7 @@ class TerminalDirective(SphinxDirective):
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
-        "noinput": directives.flag,
+        "output-only": directives.flag,
         "scroll": directives.flag,
         "copy": directives.flag,
         "input": directives.unchanged,  # deprecated
@@ -75,7 +75,7 @@ class TerminalDirective(SphinxDirective):
         host = self.options.get("host", "host")
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
-        commands = "noinput" not in self.options
+        has_input = "output-only" not in self.options
 
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
@@ -103,69 +103,30 @@ class TerminalDirective(SphinxDirective):
             addnodes.highlightlang(lang="text", force=False, linenothreshold=10000)
         )
 
-        if "input" in self.options:
-            out.append(self.input_line(prompt_text, [self.options.get("input", "")]))
+        # Split inputs and output
+        input_lines: list[str] = []
+        output_lines: list[str] = []
 
-            for blob in filter(None, parse_contents(self.content)):
-                if blob[0].startswith(":input: "):
-                    out.append(
-                        self.input_line(prompt_text, [blob[0][len(":input: ") :]])
-                    )
-                else:
-                    output = nodes.literal_block(text="\n".join(blob))
-                    output["classes"].append("terminal-code")
-                    out.append(output)
-        else:
-            # Split inputs and output
-            input_lines: list[str] = []
-            output_lines: list[str] = []
-
-            # Add the prompt and input
-            for line in self.content:
-                if commands:
+        # Add the prompt and input
+        for line in self.content:
+            if has_input:
+                if has_input := bool(line.strip()):
                     input_lines += [line]
-                    if not line.strip():
-                        commands = False
-                        input_lines = [input_lines[0]] + ["> " + line for line in input_lines[1:-1]]
-                        out.append(self.input_line(prompt_text, input_lines))
-                        input_lines = []
-                else:
-                    output_lines += [line]
-                    if not line.strip() and "noinput" not in self.options:
-                        commands = True
-                        output = nodes.literal_block(text="\n".join(output_lines))
-                        output["classes"].append("terminal-code")
-                        out.append(output)
-                        output_lines = []
+            else:
+                output_lines += [line]
 
-            if input_lines:
-                out.append(self.input_line(prompt_text, input_lines))
+        if input_lines:
+            out.append(
+                self.input_line(
+                    prompt_text,
+                    [input_lines[0]] + ["> " + line for line in input_lines[1:]],
+                )
+            )
 
-            # Add output lines
-            if output_lines:
-                output = nodes.literal_block(text="\n".join(output_lines))
-                output["classes"].append("terminal-code")
-                out.append(output)
+        # Add output lines
+        if output_lines:
+            output = nodes.literal_block(text="\n".join(output_lines))
+            output["classes"].append("terminal-code")
+            out.append(output)
 
         return [out]
-
-
-def parse_contents(contents: StringList) -> list[list[str]]:
-    """Parse the directive's content.
-
-    This is to differentiate between input and output lines in
-    the directive's content.
-    """
-    command_output: list[str] = []
-    out: list[list[str]] = []
-
-    for line in contents:
-        if line.startswith(":input: "):
-            out.append(command_output)
-            out.append([line])
-            command_output = []
-        else:
-            command_output.append(line)
-
-    out.append(command_output)
-    return out

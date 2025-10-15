@@ -27,6 +27,10 @@ html_title = project
 html_theme = "furo"
 
 extensions = [
+    "sphinx_copybutton",
     "sphinx_terminal",
     "myst_parser",
 ]
+
+copybutton_prompt_text = "> |"
+copybutton_prompt_is_regexp = True

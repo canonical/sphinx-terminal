@@ -41,7 +41,7 @@
 
 .terminal-code pre {
   font-size: var(--font-size--small--2);
-  background-color: transparent;
+  background-color: #2b2b2b;
 }
 
 div.terminal-code {
