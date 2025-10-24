@@ -82,7 +82,7 @@ pip install sphinx-terminal
 ```
 
 After adding sphinx-terminal to your Python project, update your Sphinx's conf.py file
-to include hello-ext as one of its extensions:
+to include sphinx-terminal as one of its extensions:
 
 ```python
 extensions = [
@@ -94,6 +94,9 @@ extensions = [
 
 You can report any issues or bugs on the project's [GitHub
 repository](https://github.com/canonical/sphinx-terminal).
+
+If you're interested in contributing, start with the [contribution
+guide](https://github.com/canonical/sphinx-terminal/blob/main/CONTRIBUTING.md).
 
 sphinx-terminal is covered by the [Ubuntu Code of
 Conduct](https://ubuntu.com/community/ethos/code-of-conduct).

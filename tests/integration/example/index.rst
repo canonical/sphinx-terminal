@@ -2,6 +2,8 @@
 Test doc
 ========
 
+Multiple inputs and outputs:
+
 .. terminal::
     :copy:
     :scroll:
@@ -12,6 +14,12 @@ Test doc
     echo 'hello'
 
     hello
+
+No input:
+
+.. terminal::
+
+    no input
 
 .. toctree::
     :hidden:
