@@ -58,11 +58,11 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
 
 ### No input command
 
-Use the `:noinput:` option to prevent any text from being interpreted as a command input:
+Use the `:output-only:` option to prevent any text from being interpreted as a command input:
 
 ```
 .. terminal::
-    :noinput:
+    :ouput-only:
 
     output
 ```
