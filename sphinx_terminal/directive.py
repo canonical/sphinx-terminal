@@ -33,7 +33,7 @@ class TerminalDirective(SphinxDirective):
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
-        "noinput": directives.flag,
+        "output-only": directives.flag,
         "scroll": directives.flag,
         "copy": directives.flag,
     }
@@ -73,7 +73,7 @@ class TerminalDirective(SphinxDirective):
         host = self.options.get("host", "host")
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
-        commands = "noinput" not in self.options
+        has_input = "output-only" not in self.options
 
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
@@ -107,14 +107,19 @@ class TerminalDirective(SphinxDirective):
 
         # Add the prompt and input
         for line in self.content:
-            if commands:
-                if line.strip():
+            if has_input:
+                if has_input := bool(line.strip()):
                     input_lines += [line]
-                else:
-                    commands = False
             else:
                 output_lines += [line]
-        out.append(self.input_line(prompt_text, input_lines))
+
+        if input_lines:
+            out.append(
+                self.input_line(
+                    prompt_text,
+                    [input_lines[0]] + ["> " + line for line in input_lines[1:]],
+                )
+            )
 
         # Add output lines
         if output_lines:

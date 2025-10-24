@@ -34,10 +34,6 @@
   color: yellowgreen;
 }
 
-.terminal span.command code.literal + code.literal {
-  padding-left: 4em;
-}
-
 .terminal.scroll .input,
 .terminal.scroll .output {
   width: max-content;

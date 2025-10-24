@@ -26,7 +26,7 @@ No input
     :user: author
     :host: canonical
     :dir: ~/path
-    :noinput:
+    :output-only:
 
     something
     something more

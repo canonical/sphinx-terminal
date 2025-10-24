@@ -231,7 +231,7 @@ def test_terminal_multiline(fake_terminal_directive):
     command_container = nodes.inline()
     command = nodes.literal(text="echo 'hello'\n")
     command_container.append(command)
-    command = nodes.literal(text="echo 'test'\n")
+    command = nodes.literal(text="> echo 'test'\n")
     command_container.append(command)
     command_container["classes"] = "command"
     input_container.append(command_container)
@@ -251,7 +251,7 @@ def test_terminal_multiline(fake_terminal_directive):
     "fake_terminal_directive",
     [
         {
-            "options": {"noinput": None},
+            "options": {"output-only": None},
             "content": ["hello"],
         }
     ],
@@ -266,20 +266,6 @@ def test_terminal_no_input(fake_terminal_directive):
     highlight["lang"] = "text"
     highlight["linenothreshold"] = "10000"
     expected.append(highlight)
-
-    input_container = nodes.container()
-    input_container["classes"] = "input"
-
-    prompt_container = nodes.container()
-    prompt_container["classes"] = "prompt"
-    prompt_text = nodes.literal(text="user@host:~$ ")
-    prompt_container.append(prompt_text)
-    input_container.append(prompt_container)
-
-    command_container = nodes.inline()
-    command_container["classes"] = ["command"]
-    input_container.append(command_container)
-    expected.append(input_container)
 
     output_block = nodes.literal_block(text="hello")
     output_block["classes"] = "terminal-code"
@@ -322,7 +308,7 @@ def test_terminal_no_output(fake_terminal_directive):
     command_container = nodes.inline()
     command = nodes.literal(text="echo 'hello'\n")
     command_container.append(command)
-    command = nodes.literal(text="echo 'test'\n")
+    command = nodes.literal(text="> echo 'test'\n")
     command_container.append(command)
     command_container["classes"] = "command"
     input_container.append(command_container)

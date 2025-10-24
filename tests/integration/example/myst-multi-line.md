@@ -22,7 +22,7 @@ more
 :user: author
 :host: canonical
 :dir: ~/path
-:noinput:
+:output-only:
 
 hello
 more
