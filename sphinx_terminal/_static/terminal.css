@@ -20,6 +20,7 @@
   display: block;
   padding: 0 0.4rem 0 0.875rem;
   line-height: 1;
+  min-height: 1.3em;
 }
 
 .terminal .input .literal {
