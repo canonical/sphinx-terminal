@@ -6,6 +6,7 @@ requires-python = ">=3.10"
 dependencies = [
     "docutils>=0.21.2",
     "sphinx~=7.0",
+    "sphinx-copybutton>=0.5.2",
 ]
 license = "GPL-3.0"
 

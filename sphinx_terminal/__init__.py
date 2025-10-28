@@ -16,6 +16,8 @@
 
 """Adds the directive to Sphinx."""
 
+import importlib.util
+
 from sphinx.util.typing import ExtensionMetadata
 from sphinx.application import Sphinx
 from .directive import TerminalDirective
@@ -39,7 +41,14 @@ def setup(app: Sphinx) -> ExtensionMetadata:
 
     returns: ExtensionMetadata
     """
+    try:
+        if importlib.util.find_spec("sphinx_copybutton") is not None:
+            app.setup_extension("sphinx_copybutton")
+    except ModuleNotFoundError:
+        print("Could not find 'sphinx-copybutton'.")
+
     app.add_directive("terminal", TerminalDirective)
+
     common.add_css(app, "terminal.css")
 
     copybutton_classes = "div.terminal.copybutton > div.container > code.command, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
