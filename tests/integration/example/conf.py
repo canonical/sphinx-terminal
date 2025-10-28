@@ -32,4 +32,5 @@ extensions = [
     "myst_parser",
 ]
 
-copybutton_selector = "span.command"
+copybutton_prompt_text = "> |"
+copybutton_prompt_is_regexp = True
