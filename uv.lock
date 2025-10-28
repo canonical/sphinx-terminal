@@ -904,6 +904,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
+    { name = "sphinx-copybutton" },
 ]
 lint = [
     { name = "mypy" },
@@ -929,6 +930,7 @@ dev = [
     { name = "pytest", specifier = ">=8.4.0" },
     { name = "pytest-cov", specifier = "~=6.0" },
     { name = "pytest-mock", specifier = "~=3.12" },
+    { name = "sphinx-copybutton" },
 ]
 lint = [{ name = "mypy", specifier = ">=1.16.0" }]
 types = [

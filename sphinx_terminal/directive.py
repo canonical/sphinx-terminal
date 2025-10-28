@@ -18,30 +18,8 @@
 
 from docutils import nodes
 from docutils.parsers.rst import directives
-from docutils.statemachine import StringList
 from sphinx import addnodes
 from sphinx.util.docutils import SphinxDirective
-
-
-def parse_contents(contents: StringList) -> list[list[str]]:
-    """Parse the directive's content.
-
-    This is to differentiate between input and output lines in
-    the directive's content.
-    """
-    command_output: list[str] = []
-    out: list[list[str]] = []
-
-    for line in contents:
-        if line.startswith(":input: "):
-            out.append(command_output)
-            out.append([line])
-            command_output = []
-        else:
-            command_output.append(line)
-
-    out.append(command_output)
-    return out
 
 
 class TerminalDirective(SphinxDirective):
@@ -52,16 +30,16 @@ class TerminalDirective(SphinxDirective):
     has_content = True
     option_spec = {
         "class": directives.class_option,
-        "input": directives.unchanged,
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
+        "output-only": directives.flag,
         "scroll": directives.flag,
         "copy": directives.flag,
     }
 
     @staticmethod
-    def input_line(prompt_text: str, command_text: str) -> nodes.container:
+    def input_line(prompt_text: str, commands: list[str]) -> nodes.container:
         """Construct the prompt with the user-provided options (if any)."""
         input_line = nodes.container()
         input_line["classes"].append("input")
@@ -71,12 +49,18 @@ class TerminalDirective(SphinxDirective):
         # but what's a few bytes between friends?
         prompt_container = nodes.container()
         prompt_container["classes"].append("prompt")
+
         prompt = nodes.literal(text=prompt_text)
         prompt_container.append(prompt)
         input_line.append(prompt_container)
 
-        command = nodes.literal(text=command_text)
+        command = nodes.inline()
+
+        for line in commands:
+            command.append(nodes.literal(text=f"{line}\n"))
+
         command["classes"].append("command")
+
         input_line.append(command)
         return input_line
 
@@ -85,11 +69,11 @@ class TerminalDirective(SphinxDirective):
         # if :user: or :host: are provided, replace those in the prompt
 
         classes = self.options.get("class", "")
-        command = self.options.get("input", "")
         user = self.options.get("user", "user")
         host = self.options.get("host", "host")
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
+        has_input = "output-only" not in self.options
 
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
@@ -107,6 +91,8 @@ class TerminalDirective(SphinxDirective):
             out["classes"].append("copybutton")
         for item in classes:
             out["classes"].append(item)
+        if "scroll" in self.options:
+            out["classes"].append("scroll")
 
         # The super-large value for linenothreshold is a major hack since I
         # can't figure out how to disable line numbering and the
@@ -114,24 +100,31 @@ class TerminalDirective(SphinxDirective):
         out.append(
             addnodes.highlightlang(lang="text", force=False, linenothreshold=10000)
         )
-        if "scroll" in self.options:
-            out["classes"].append("scroll")
 
-        # Add the original prompt and input
-        if command:
-            out.append(self.input_line(prompt_text, command))
+        # Split inputs and output
+        input_lines: list[str] = []
+        output_lines: list[str] = []
 
-        # Go through the content and append all lines as output
-        # except for the ones that start with ":input: " - those get
-        # a prompt
-
-        parsed_content = parse_contents(self.content)
-
-        for blob in filter(None, parsed_content):
-            if blob[0].startswith(":input: "):
-                out.append(self.input_line(prompt_text, blob[0][len(":input: ") :]))
+        # Add the prompt and input
+        for line in self.content:
+            if has_input:
+                if has_input := bool(line.strip()):
+                    input_lines += [line]
             else:
-                output = nodes.literal_block(text="\n".join(blob))
-                output["classes"].append("terminal-code")
-                out.append(output)
+                output_lines += [line]
+
+        if input_lines:
+            out.append(
+                self.input_line(
+                    prompt_text,
+                    [input_lines[0]] + ["> " + line for line in input_lines[1:]],
+                )
+            )
+
+        # Add output lines
+        if output_lines:
+            output = nodes.literal_block(text="\n".join(output_lines))
+            output["classes"].append("terminal-code")
+            out.append(output)
+
         return [out]

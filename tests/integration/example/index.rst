@@ -10,12 +10,10 @@ Multiple inputs and outputs:
     :user: author
     :host: canonical
     :dir: ~/path
-    :input: echo 'hello'
+
+    echo 'hello'
 
     hello
-    :input: echo 'goodbye'
-
-    goodbye
 
 No input:
 
@@ -27,3 +25,5 @@ No input:
     :hidden:
 
     myst-source
+    rst-multi-line
+    myst-multi-line

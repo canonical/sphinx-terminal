@@ -10,14 +10,14 @@ providing input and output as follows:
 
 ```
 .. terminal::
-    :input: echo 'hello'
 
-    hello
-    :input: echo 'goodbye'
+    input
 
-    goodbye
-
+    output
 ```
+
+Multiple input lines can be used, as long as they are in the same paragraph.
+They will automatically be indented in the HTML output.
 
 The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
 and `:dir:` options.
@@ -27,21 +27,22 @@ and `:dir:` options.
     :user: author
     :host: canonical
     :dir: ~/path
-    :input: echo 'hello'
+
+    echo 'hello'
 
     hello
-
 ```
 
 To enable a copy button for users, include the `:copy:` flag as a directive option.
+Only the input can be copied.
 
 ```
 .. terminal::
     :copy:
-    :input: echo 'hello'
+
+    echo 'hello'
 
     hello
-
 ```
 
 Similarly, to make the output scrollable, include the `:scroll:` flag as a directive option.
@@ -49,11 +50,28 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
 ```
 .. terminal::
     :scroll:
-    :input: echo 'hello'
+
+    echo 'hello'
 
     hello
+```
+
+### No input command
+
+Use the `:output-only:` option to prevent any text from being interpreted as a command input:
 
 ```
+.. terminal::
+    :ouput-only:
+
+    output
+```
+
+### Copybutton support
+
+When used in combination with [sphinx-copybutton](https://github.com/executablebooks/sphinx-copybutton)
+ensure that `sphinx_copybutton` is higher in the `extensions` list than
+`sphinx_terminal`.
 
 ## Project setup
 
