@@ -37,10 +37,11 @@ except ImportError:
 def setup(app: Sphinx) -> ExtensionMetadata:
     """Connect the extension to the Sphinx application instance.
 
-    app (Sphinx):
+    app (Sphinx): The Sphinx application instance.
 
     returns: ExtensionMetadata
     """
+    # add sphinx-copybutton to Sphinx's extensions
     try:
         if importlib.util.find_spec("sphinx_copybutton") is not None:
             app.setup_extension("sphinx_copybutton")
@@ -51,12 +52,20 @@ def setup(app: Sphinx) -> ExtensionMetadata:
 
     common.add_css(app, "terminal.css")
 
-    copybutton_classes = "span.command"
-
+    copybutton_classes = "span.copybutton"
     if "copybutton_selector" not in app.config.values:
         app.add_config_value("copybutton_selector", copybutton_classes, "html")
     if app.config.copybutton_selector == "div.highlight pre":
         app.config.copybutton_selector = copybutton_classes
+
+    # Configure copybutton to ignore the multiline prompt. These values will be
+    # overridden if included in conf.py
+    if "copybutton_prompt_text" not in app.config.values:
+        app.add_config_value("copybutton_prompt_text", default="> |", rebuild="html")
+    if "copybutton_prompt_is_regexp" not in app.config.values:
+        app.add_config_value(
+            "copybutton_prompt_is_regexp", default=True, rebuild="html"
+        )
 
     return {
         "version": __version__,

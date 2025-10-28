@@ -17,6 +17,7 @@
 import pytest
 from docutils import nodes
 from sphinx import addnodes
+from sphinx.errors import SphinxError
 
 
 @pytest.mark.parametrize(
@@ -120,7 +121,7 @@ def test_terminal_directive_prompt(fake_terminal_directive):
 )
 def test_terminal_copy_scroll(fake_terminal_directive):
     expected = nodes.container()
-    expected["classes"] = "terminal copybutton scroll"
+    expected["classes"] = "terminal scroll"
 
     highlight = addnodes.highlightlang()
     highlight["force"] = "False"
@@ -138,7 +139,7 @@ def test_terminal_copy_scroll(fake_terminal_directive):
     input_container.append(prompt_container)
 
     command_container = nodes.inline()
-    command_container["classes"] = "command"
+    command_container["classes"] = "command copybutton"
     command = nodes.literal(text="echo 'hello'\n")
     command_container.append(command)
     input_container.append(command_container)
@@ -317,3 +318,20 @@ def test_terminal_no_output(fake_terminal_directive):
     actual = fake_terminal_directive.run()[0]
 
     assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
+            "options": {
+                "copy": None,
+                "output-only": None,
+            },
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_copy_output_only(fake_terminal_directive):
+    with pytest.raises(SphinxError):
+        fake_terminal_directive.run()

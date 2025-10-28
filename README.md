@@ -5,8 +5,8 @@ documentation.
 
 ## Basic usage
 
-To display terminal input and output in your rST document, use the `terminal` directive,
-providing input and output as follows:
+To display terminal input and output in your Sphinx document, use the `terminal`
+directive, providing input and output as follows:
 
 ```
 .. terminal::
@@ -16,8 +16,8 @@ providing input and output as follows:
     output
 ```
 
-Multiple input lines can be used, as long as they are in the same paragraph.
-They will automatically be indented in the HTML output.
+Input can span multiple lines, as long as the lines are in the same paragraph.
+Everything after the first blank line in the directive's body is rendered as output.
 
 The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
 and `:dir:` options.
@@ -33,6 +33,16 @@ and `:dir:` options.
     hello
 ```
 
+To render only the output of a command, include the `:output-only:` flag in the
+directive's options.
+
+```
+.. terminal::
+    :output-only:
+
+    This is rendered as output.
+```
+
 To enable a copy button for users, include the `:copy:` flag as a directive option.
 Only the input can be copied.
 
@@ -45,7 +55,8 @@ Only the input can be copied.
     hello
 ```
 
-Similarly, to make the output scrollable, include the `:scroll:` flag as a directive option.
+Similarly, to make the output scrollable, include the `:scroll:` flag as a directive
+option.
 
 ```
 .. terminal::
@@ -56,23 +67,6 @@ Similarly, to make the output scrollable, include the `:scroll:` flag as a direc
     hello
 ```
 
-### No input command
-
-Use the `:output-only:` option to prevent any text from being interpreted as a command input:
-
-```
-.. terminal::
-    :ouput-only:
-
-    output
-```
-
-### Copybutton support
-
-When used in combination with [sphinx-copybutton](https://github.com/executablebooks/sphinx-copybutton)
-ensure that `sphinx_copybutton` is higher in the `extensions` list than
-`sphinx_terminal`.
-
 ## Project setup
 
 sphinx-terminal is published on PyPI and can be installed with:
@@ -81,14 +75,27 @@ sphinx-terminal is published on PyPI and can be installed with:
 pip install sphinx-terminal
 ```
 
-After adding sphinx-terminal to your Python project, update your Sphinx's conf.py file
-to include sphinx-terminal as one of its extensions:
+After adding sphinx-terminal to your Python project, update Sphinx's conf.py file to
+include sphinx-terminal as one of its extensions:
 
 ```python
 extensions = [
     "sphinx_terminal"
 ]
 ```
+
+The copy button functionality depends on
+[sphinx-copybutton](https://sphinx-copybutton.readthedocs.io/en/latest/).
+sphinx-terminal automatically adds this extension to your Sphinx project and configures
+it to ignore the multiline input prompt.
+
+```python
+copybutton_prompt_text = "> |"
+copybutton_prompt_is_regexp = True
+```
+
+Customizing these configurations in your conf.py file overrides the defaults assigned by
+sphinx-terminal.
 
 ## Community and support
 

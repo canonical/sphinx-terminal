@@ -2,7 +2,8 @@
 Test doc
 ========
 
-Multiple inputs and outputs:
+This document is parsed with bs4 to ensure that the rendered HTML matches the
+expected output:
 
 .. terminal::
     :copy:
@@ -11,19 +12,15 @@ Multiple inputs and outputs:
     :host: canonical
     :dir: ~/path
 
-    echo 'hello'
+    input
 
-    hello
+    output
 
-No input:
 
-.. terminal::
-
-    no input
+The following documents include more examples for manual review:
 
 .. toctree::
-    :hidden:
+    :maxdepth: 1
 
-    myst-source
-    rst-multi-line
-    myst-multi-line
+    rst-examples
+    myst-examples
