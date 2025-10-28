@@ -19,7 +19,6 @@ output line 3
 ## No input
 
 ```{terminal}
-:copy:
 :user: author
 :host: canonical
 :dir: ~/path

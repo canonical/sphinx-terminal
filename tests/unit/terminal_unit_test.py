@@ -17,6 +17,7 @@
 import pytest
 from docutils import nodes
 from sphinx import addnodes
+from sphinx.errors import SphinxError
 
 
 @pytest.mark.parametrize(
@@ -317,3 +318,20 @@ def test_terminal_no_output(fake_terminal_directive):
     actual = fake_terminal_directive.run()[0]
 
     assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
+            "options": {
+                "copy": None,
+                "output-only": None,
+            },
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_copy_output_only(fake_terminal_directive):
+    with pytest.raises(SphinxError):
+        fake_terminal_directive.run()

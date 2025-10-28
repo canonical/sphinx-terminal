@@ -23,7 +23,6 @@ No input
 --------
 
 .. terminal::
-    :copy:
     :scroll:
     :user: author
     :host: canonical

@@ -19,6 +19,7 @@
 from docutils import nodes
 from docutils.parsers.rst import directives
 from sphinx import addnodes
+from sphinx.errors import SphinxError
 from sphinx.util.docutils import SphinxDirective
 
 
@@ -80,6 +81,12 @@ class TerminalDirective(SphinxDirective):
         prompt_dir = self.options.get("dir", "~")
         user_symbol = "#" if user == "root" else "$"
         has_input = "output-only" not in self.options
+
+        # Raise an error if :copy: and :output-only: are both declared
+        if "output-only" in self.options and "copy" in self.options:
+            raise SphinxError(
+                ":copy: and :output-only: are mutually incompatible. Only input can be copied."
+            )
 
         if user and host:
             prompt_text = f"{user}@{host}:{prompt_dir}{user_symbol} "
