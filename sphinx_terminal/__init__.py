@@ -58,6 +58,14 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     if app.config.copybutton_selector == "div.highlight pre":
         app.config.copybutton_selector = copybutton_classes
 
+    if "copybutton_prompt_text" not in app.config.values:
+        app.add_config_value("copybutton_prompt_text", default="> |", rebuild="html")
+
+    if "copybutton_prompt_is_regexp" not in app.config.values:
+        app.add_config_value(
+            "copybutton_prompt_is_regexp", default=True, rebuild="html"
+        )
+
     return {
         "version": __version__,
         "parallel_read_safe": True,
