@@ -39,7 +39,12 @@ class TerminalDirective(SphinxDirective):
     }
 
     @staticmethod
-    def input_line(prompt_text: str, commands: list[str]) -> nodes.container:
+    def input_line(
+        prompt_text: str,
+        commands: list[str],
+        *,
+        is_copyable: bool,
+    ) -> nodes.container:
         """Construct the prompt with the user-provided options (if any)."""
         input_line = nodes.container()
         input_line["classes"].append("input")
@@ -60,6 +65,8 @@ class TerminalDirective(SphinxDirective):
             command.append(nodes.literal(text=f"{line}\n"))
 
         command["classes"].append("command")
+        if is_copyable:
+            command["classes"].append("copybutton")
 
         input_line.append(command)
         return input_line
@@ -67,7 +74,6 @@ class TerminalDirective(SphinxDirective):
     def run(self) -> list[nodes.Node]:
         """Construct the output of the terminal directive."""
         # if :user: or :host: are provided, replace those in the prompt
-
         classes = self.options.get("class", "")
         user = self.options.get("user", "user")
         host = self.options.get("host", "host")
@@ -87,8 +93,6 @@ class TerminalDirective(SphinxDirective):
 
         out = nodes.container()
         out["classes"].append("terminal")
-        if "copy" in self.options:
-            out["classes"].append("copybutton")
         for item in classes:
             out["classes"].append(item)
         if "scroll" in self.options:
@@ -118,6 +122,7 @@ class TerminalDirective(SphinxDirective):
                 self.input_line(
                     prompt_text,
                     [input_lines[0]] + ["> " + line for line in input_lines[1:]],
+                    is_copyable="copy" in self.options,
                 )
             )
 

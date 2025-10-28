@@ -20,14 +20,13 @@ import sys
 project_dir = pathlib.Path(__file__).parents[1].resolve()
 sys.path.insert(0, str(project_dir.absolute()))
 
-project = "Mock"
+project = "Terminal test output"
 author = "Tester"
 
 html_title = project
 html_theme = "furo"
 
 extensions = [
-    "sphinx_copybutton",
     "sphinx_terminal",
     "myst_parser",
 ]

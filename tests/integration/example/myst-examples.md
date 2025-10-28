@@ -1,6 +1,6 @@
-# Myst additional options
+# Myst examples
 
-## Multi-line
+## Multi-line input
 
 ```{terminal}
 :copy:
@@ -8,11 +8,12 @@
 :host: canonical
 :dir: ~/path
 
-echo 'goodbye'
-echo 'more'
+input line 1
+input line 2
 
-goodbye
-more
+output line 1
+output line 2
+output line 3
 ```
 
 ## No input
@@ -24,9 +25,10 @@ more
 :dir: ~/path
 :output-only:
 
-hello
-more
-goodbye
+output line 1
+output line 2
+
+output line 3
 ```
 
 ## No output
@@ -37,7 +39,7 @@ goodbye
 :host: canonical
 :dir: ~/path
 
-echo 'hello'
-echo 'more'
-echo 'goodbye'
+input line 1
+input line 2
+input line 3
 ```

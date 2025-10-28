@@ -120,7 +120,7 @@ def test_terminal_directive_prompt(fake_terminal_directive):
 )
 def test_terminal_copy_scroll(fake_terminal_directive):
     expected = nodes.container()
-    expected["classes"] = "terminal copybutton scroll"
+    expected["classes"] = "terminal scroll"
 
     highlight = addnodes.highlightlang()
     highlight["force"] = "False"
@@ -138,7 +138,7 @@ def test_terminal_copy_scroll(fake_terminal_directive):
     input_container.append(prompt_container)
 
     command_container = nodes.inline()
-    command_container["classes"] = "command"
+    command_container["classes"] = "command copybutton"
     command = nodes.literal(text="echo 'hello'\n")
     command_container.append(command)
     input_container.append(command_container)

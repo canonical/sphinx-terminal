@@ -1,8 +1,8 @@
-RST additional options
-======================
+RST examples
+============
 
-Multi-line
-----------
+Multi-line input
+----------------
 
 .. terminal::
     :copy:
@@ -11,11 +11,13 @@ Multi-line
     :host: canonical
     :dir: ~/path
 
-    echo 'more'
-    echo 'even more!'
+    input line 1
+    input line 2
 
-    more
-    even more!
+    output line 1
+    output line 2
+
+    output line-3
 
 No input
 --------
@@ -28,8 +30,10 @@ No input
     :dir: ~/path
     :output-only:
 
-    something
-    something more
+    output line 1
+    output line 2
+
+    output line 3
 
 No output
 ---------
@@ -41,5 +45,5 @@ No output
     :host: canonical
     :dir: ~/path
 
-    echo 'something'
-    echo 'something more'
+    input line 1
+    input line 2
