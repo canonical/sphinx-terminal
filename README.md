@@ -17,7 +17,7 @@ directive, providing input and output as follows:
 ```
 
 Input can span multiple lines, as long as the lines are in the same paragraph.
-Everything after the first blank line is rendered as output.
+Everything after the first blank line in the directive's body is rendered as output.
 
 The prompt defaults to `user@host:~$`. To customize this, use the `:user:`, `:host:`,
 and `:dir:` options.
