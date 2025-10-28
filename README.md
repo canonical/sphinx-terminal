@@ -34,7 +34,7 @@ and `:dir:` options.
 ```
 
 To enable a copy button for users, include the `:copy:` flag as a directive option.
-Only the input will be available to copy.
+Only the input can be copied.
 
 ```
 .. terminal::
