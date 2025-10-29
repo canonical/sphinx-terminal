@@ -16,7 +16,6 @@ expected output:
 
     output
 
-
 The following documents include more examples for manual review:
 
 .. toctree::

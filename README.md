@@ -87,9 +87,10 @@ extensions = [
 The copy button functionality depends on
 [sphinx-copybutton](https://sphinx-copybutton.readthedocs.io/en/latest/).
 sphinx-terminal automatically adds this extension to your Sphinx project and configures
-it to ignore the multiline input prompt.
+it to copy terminal input and ignore the multiline prompt.
 
 ```python
+copybutton_selector = "span.copybutton, div:not(.terminal-code) > div.highlight > pre"
 copybutton_prompt_text = "> |"
 copybutton_prompt_is_regexp = True
 ```
