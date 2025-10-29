@@ -48,3 +48,9 @@ input line 3
 ```{code-block}
 This should remain copyable.
 ```
+
+```{code-block} text
+:class: no-copybutton
+
+This shouldn't be copyable.
+```
