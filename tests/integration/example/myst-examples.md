@@ -1,4 +1,4 @@
-# Myst examples
+# MyST examples
 
 ## Multi-line input
 
@@ -41,4 +41,10 @@ output line 3
 input line 1
 input line 2
 input line 3
+```
+
+## Code blocks
+
+```{code-block}
+This should remain copyable.
 ```

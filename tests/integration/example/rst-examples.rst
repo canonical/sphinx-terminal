@@ -1,4 +1,4 @@
-RST examples
+rST examples
 ============
 
 Multi-line input
@@ -19,6 +19,7 @@ Multi-line input
 
     output line-3
 
+
 No input
 --------
 
@@ -34,6 +35,7 @@ No input
 
     output line 3
 
+
 No output
 ---------
 
@@ -46,3 +48,11 @@ No output
 
     input line 1
     input line 2
+
+
+Code blocks
+-----------
+
+.. code-block::
+
+    This should remain copyable.
