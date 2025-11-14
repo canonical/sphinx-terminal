@@ -35,7 +35,7 @@ def example_project(request) -> Path:
 
 
 @pytest.mark.slow
-def test_hello_integration(example_project):
+def test_terminal_integration(example_project):
     build_dir = example_project / "_build"
     subprocess.check_call(
         ["sphinx-build", "-b", "html", "-W", example_project, build_dir],
