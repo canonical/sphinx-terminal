@@ -24,7 +24,7 @@
 }
 
 .terminal .input .literal {
-  white-space-collapse: break-spaces;
+  white-space-collapse: preserve-breaks;
   background: transparent;
 }
 
