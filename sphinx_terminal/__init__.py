@@ -62,12 +62,16 @@ def setup(app: Sphinx) -> ExtensionMetadata:
 
     # Configure copybutton to ignore the multiline prompt. These values will be
     # overridden if included in conf.py
-    if "copybutton_prompt_text" not in app.config.values:
-        app.add_config_value("copybutton_prompt_text", default="> |", rebuild="html")
-    if "copybutton_prompt_is_regexp" not in app.config.values:
-        app.add_config_value(
-            "copybutton_prompt_is_regexp", default=True, rebuild="html"
-        )
+    app.config.copybutton_prompt_text = (
+        "> |"
+        if not app.config.copybutton_prompt_text
+        else app.config.copybutton_prompt_text
+    )
+    app.config.copybutton_prompt_is_regexp = (
+        True
+        if not app.config.copybutton_prompt_is_regexp
+        else app.config.copybutton_prompt_is_regexp
+    )
 
     return {
         "version": __version__,
