@@ -30,6 +30,3 @@ extensions = [
     "sphinx_terminal",
     "myst_parser",
 ]
-
-copybutton_prompt_text = "> |"
-copybutton_prompt_is_regexp = True

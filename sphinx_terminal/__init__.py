@@ -49,25 +49,16 @@ def setup(app: Sphinx) -> ExtensionMetadata:
         print("Could not find 'sphinx-copybutton'.")
 
     app.add_directive("terminal", TerminalDirective)
-
     common.add_css(app, "terminal.css")
 
-    copybutton_classes = (
-        "span.copybutton, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
-    )
-    if "copybutton_selector" not in app.config.values:
-        app.add_config_value("copybutton_selector", copybutton_classes, "html")
     if app.config.copybutton_selector == "div.highlight pre":
-        app.config.copybutton_selector = copybutton_classes
+        app.config.copybutton_selector = "span.copybutton, div:not(.terminal-code, .no-copybutton) > div.highlight > pre"
 
     # Configure copybutton to ignore the multiline prompt. These values will be
     # overridden if included in conf.py
-    if "copybutton_prompt_text" not in app.config.values:
-        app.add_config_value("copybutton_prompt_text", default="> |", rebuild="html")
-    if "copybutton_prompt_is_regexp" not in app.config.values:
-        app.add_config_value(
-            "copybutton_prompt_is_regexp", default=True, rebuild="html"
-        )
+    app.config.copybutton_prompt_is_regexp = True
+    if app.config.copybutton_prompt_text == "":
+        app.config.copybutton_prompt_text = "> |"
 
     return {
         "version": __version__,
