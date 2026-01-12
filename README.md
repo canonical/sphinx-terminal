@@ -95,8 +95,8 @@ copybutton_prompt_text = "> |"
 copybutton_prompt_is_regexp = True
 ```
 
-Customizing these configurations in your conf.py file overrides the defaults assigned by
-sphinx-terminal.
+Customizing these values in your conf.py file overrides the defaults assigned by
+sphinx-terminal and may compromise the copy button.
 
 ## Community and support
 
