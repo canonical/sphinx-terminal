@@ -98,3 +98,8 @@ button.copybtn.success {
     color 0.3s,
     opacity 0.3s;
 }
+
+/* Hide the default CSS tooltip */
+.terminal .o-tooltip--left:hover:after {
+  display: none;
+}
