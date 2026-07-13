@@ -43,6 +43,15 @@ input line 2
 input line 3
 ```
 
+## No input or output
+
+```{terminal}
+:copy:
+:user: author
+:host: canonical
+:dir: ~/path
+```
+
 ## Stacked terminals
 
 ```{terminal}

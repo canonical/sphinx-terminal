@@ -258,7 +258,7 @@ def test_terminal_multiline(fake_terminal_directive):
     ],
     indirect=True,
 )
-def test_terminal_no_input(fake_terminal_directive):
+def test_terminal_output_only(fake_terminal_directive):
     expected = nodes.container()
     expected["classes"] = "terminal"
 
@@ -272,6 +272,40 @@ def test_terminal_no_input(fake_terminal_directive):
     output_block["classes"] = "terminal-code"
     output_block["xml:space"] = "preserve"
     expected.append(output_block)
+
+    actual = fake_terminal_directive.run()[0]
+
+    assert str(expected) == str(actual)
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
+            "content": [],
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_empty_input_line(fake_terminal_directive):
+    expected = nodes.container()
+    expected["classes"] = "terminal"
+
+    highlight = addnodes.highlightlang()
+    highlight["force"] = "False"
+    highlight["lang"] = "text"
+    highlight["linenothreshold"] = "10000"
+    expected.append(highlight)
+
+    input_container = nodes.container()
+    input_container["classes"] = "input"
+
+    prompt_container = nodes.container()
+    prompt_container["classes"] = "prompt"
+    prompt_text = nodes.literal(text="user@host:~$ ")
+    prompt_container.append(prompt_text)
+    input_container.append(prompt_container)
+    expected.append(input_container)
 
     actual = fake_terminal_directive.run()[0]
 
@@ -333,5 +367,21 @@ def test_terminal_no_output(fake_terminal_directive):
     indirect=True,
 )
 def test_terminal_copy_output_only(fake_terminal_directive):
+    with pytest.raises(SphinxError):
+        fake_terminal_directive.run()
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        {
+            "options": {
+                "output-only": None,
+            },
+        }
+    ],
+    indirect=True,
+)
+def test_terminal_output_only_no_output(fake_terminal_directive):
     with pytest.raises(SphinxError):
         fake_terminal_directive.run()
