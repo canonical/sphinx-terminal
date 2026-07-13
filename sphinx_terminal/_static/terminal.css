@@ -3,6 +3,18 @@
   color: #ebebeb;
   border: 1px solid #666;
   padding: 0.625rem 0;
+
+  /* Followed by another terminal */
+  &:has(+ &) {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* Preceded by another terminal */
+  & + & {
+    border-top: 0;
+    padding-top: 0;
+  }
 }
 
 .terminal .highlight {
@@ -45,7 +57,7 @@
 }
 
 div.terminal-code {
-  margin: 0 0;
+  margin: 0;
 }
 
 /* Copybutton settings */

@@ -50,6 +50,32 @@ No output
     input line 2
 
 
+Stacked terminals
+-----------------
+
+.. terminal::
+    :copy:
+    :scroll:
+    :user: author
+    :host: canonical
+    :dir: ~/path
+
+    input 1
+
+    output 1
+
+.. terminal::
+    :copy:
+    :scroll:
+    :user: author
+    :host: canonical
+    :dir: ~/path
+
+    input 2
+
+    output 2
+
+
 Code blocks
 -----------
 
