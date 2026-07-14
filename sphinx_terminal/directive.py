@@ -82,13 +82,14 @@ class TerminalDirective(SphinxDirective):
         # Raise an error if :copy: and :output-only: are both declared
         if "output-only" in self.options and "copy" in self.options:
             raise SphinxError(
-                "'copy' and 'output-only' are mutually incompatible. Only input can be copied."
+                "'copy' and 'output-only' are mutually incompatible. "
+                "Only input can be copied."
             )
 
         # Raise an error if :output-only" is declared without output.
         if "output-only" in self.options and not self.content:
             raise SphinxError(
-                "'output-only' was declared, but no output was provided."
+                "'output-only' was declared, but no output was provided. "
                 "Provide output or remove the 'output-only' option."
             )
 
