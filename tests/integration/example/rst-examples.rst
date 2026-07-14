@@ -6,7 +6,6 @@ Multi-line input
 
 .. terminal::
     :copy:
-    :scroll:
     :user: author
     :host: canonical
     :dir: ~/path
@@ -24,7 +23,6 @@ No input
 --------
 
 .. terminal::
-    :scroll:
     :user: author
     :host: canonical
     :dir: ~/path
@@ -41,7 +39,6 @@ No output
 
 .. terminal::
     :copy:
-    :scroll:
     :user: author
     :host: canonical
     :dir: ~/path
@@ -55,7 +52,6 @@ Stacked terminals
 
 .. terminal::
     :copy:
-    :scroll:
     :user: author
     :host: canonical
     :dir: ~/path
@@ -66,7 +62,6 @@ Stacked terminals
 
 .. terminal::
     :copy:
-    :scroll:
     :user: author
     :host: canonical
     :dir: ~/path
@@ -74,6 +69,35 @@ Stacked terminals
     input 2
 
     output 2
+
+
+Line wrapping and scrolling
+---------------------------
+
+The following input and output should line wrap.
+
+.. terminal::
+    :copy:
+    :user: author
+    :host: canonical
+    :dir: ~/path
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+
+The following input and output should be scrollable.
+
+.. terminal::
+    :copy:
+    :scroll:
+    :user: author
+    :host: canonical
+    :dir: ~/path
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
 
 
 Code blocks
