@@ -47,6 +47,17 @@ No output
     input line 2
 
 
+No input or output
+------------------
+
+.. terminal::
+    :copy:
+    :scroll:
+    :user: author
+    :host: canonical
+    :dir: ~/path
+
+
 Stacked terminals
 -----------------
 
