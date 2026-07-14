@@ -59,14 +59,18 @@ def test_terminal_directive(fake_terminal_directive):
 @pytest.mark.parametrize(
     "fake_terminal_directive",
     [
-        {
-            "options": {
-                "user": "author",
-                "host": "canonical",
-                "dir": "~/path",
-            },
-            "content": ["echo 'hello'", "", "hello"],
-        }
+        pytest.param(
+            {
+                "options": {"user": "author", "host": "canonical", "dir": "~/path"},
+                "content": ["echo 'hello'", "", "hello"],
+            }
+        ),
+        pytest.param(
+            {
+                "options": {"prompt": "author@canonical:~/path$ "},
+                "content": ["echo 'hello'", "", "hello"],
+            }
+        ),
     ],
     indirect=True,
 )
@@ -383,5 +387,29 @@ def test_terminal_copy_output_only(fake_terminal_directive):
     indirect=True,
 )
 def test_terminal_output_only_no_output(fake_terminal_directive):
+    with pytest.raises(SphinxError):
+        fake_terminal_directive.run()
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        pytest.param({"options": {"prompt": "test", "user": "author"}}),
+        pytest.param({"options": {"prompt": "test", "host": "canonical"}}),
+        pytest.param({"options": {"prompt": "test", "dir": "/path"}}),
+        pytest.param(
+            {
+                "options": {
+                    "prompt": "test",
+                    "user": "author",
+                    "host": "canonical",
+                    "dir": "/path",
+                }
+            }
+        ),
+    ],
+    indirect=True,
+)
+def test_incompatible_prompt_options(fake_terminal_directive):
     with pytest.raises(SphinxError):
         fake_terminal_directive.run()
