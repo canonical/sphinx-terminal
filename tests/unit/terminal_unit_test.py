@@ -46,7 +46,7 @@ def test_terminal_directive(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -95,7 +95,7 @@ def test_terminal_directive_prompt(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -144,7 +144,7 @@ def test_terminal_copy_scroll(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command copybutton"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -190,7 +190,7 @@ def test_terminal_class_option(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -234,9 +234,7 @@ def test_terminal_multiline(fake_terminal_directive):
     input_container.append(prompt_container)
 
     command_container = nodes.inline()
-    command = nodes.literal(text="echo 'hello'\n")
-    command_container.append(command)
-    command = nodes.literal(text="> echo 'test'\n")
+    command = nodes.literal(text="echo 'hello'\n> echo 'test'")
     command_container.append(command)
     command_container["classes"] = "command"
     input_container.append(command_container)
@@ -345,16 +343,14 @@ def test_terminal_no_output(fake_terminal_directive):
     input_container.append(prompt_container)
 
     command_container = nodes.inline()
-    command = nodes.literal(text="echo 'hello'\n")
-    command_container.append(command)
-    command = nodes.literal(text="> echo 'test'\n")
+    command = nodes.literal(text="echo 'hello'\n> echo 'test'")
     command_container.append(command)
     command_container["classes"] = "command"
     input_container.append(command_container)
     expected.append(input_container)
 
     actual = fake_terminal_directive.run()[0]
-
+    print(f"\n\n{expected}\n\n{actual}\n\n")
     assert str(expected) == str(actual)
 
 

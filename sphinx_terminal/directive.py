@@ -63,7 +63,7 @@ class TerminalDirective(SphinxDirective):
 
         if commands:
             command_node = nodes.inline()
-            command_node.extend(nodes.literal(text=f"{line}\n") for line in commands)
+            command_node.append(nodes.literal(text="\n".join(commands)))
             command_node["classes"].append("command")
             if is_copyable:
                 command_node["classes"].append("copybutton")

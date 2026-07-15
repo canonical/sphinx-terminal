@@ -16,7 +16,7 @@ Multi-line input
     output line 1
     output line 2
 
-    output line-3
+    output line 3
 
 
 No input
