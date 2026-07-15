@@ -67,7 +67,7 @@ def test_terminal_directive(fake_terminal_directive):
         ),
         pytest.param(
             {
-                "options": {"prompt": "author@canonical:~/path$ "},
+                "options": {"prompt": "author@canonical:~/path$"},
                 "content": ["echo 'hello'", "", "hello"],
             }
         ),

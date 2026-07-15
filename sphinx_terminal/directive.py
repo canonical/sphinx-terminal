@@ -101,7 +101,7 @@ class TerminalDirective(SphinxDirective):
             )
 
         prompt_text = (
-            self.options.get("prompt", "")
+            f"{self.options.get('prompt', '')} "
             if "prompt" in self.options
             else f"{user}@{host}:{prompt_dir}{user_symbol} "
             if user and host
