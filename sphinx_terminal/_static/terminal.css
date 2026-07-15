@@ -38,7 +38,7 @@
 .terminal .input .literal {
   white-space-collapse: preserve-breaks;
   background: transparent;
-  padding-left: 0;
+  padding: 0;
 }
 
 .terminal .input .prompt {
