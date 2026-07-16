@@ -67,6 +67,10 @@ div.terminal-code {
     width: max-content;
   }
 
+  .input .literal {
+    white-space: pre;
+  }
+
   .terminal-code {
     width: max-content;
   }
