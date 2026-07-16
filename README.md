@@ -33,6 +33,18 @@ and `:dir:` options.
     hello
 ```
 
+Or, declare the entire prompt with the `prompt` option. This is useful if you're
+documenting shells other than Bash, such as PowerShell:
+
+```
+.. terminal::
+    :prompt: PS C:\Users\Author>
+
+    Write-Output 'hello'
+
+    hello
+```
+
 To render only the output of a command, include the `:output-only:` flag in the
 directive's options.
 

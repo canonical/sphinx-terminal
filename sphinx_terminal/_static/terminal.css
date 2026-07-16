@@ -38,11 +38,11 @@
 .terminal .input .literal {
   white-space-collapse: preserve-breaks;
   background: transparent;
-  padding-left: 0;
+  padding: 0;
 }
 
 .terminal .input .prompt {
-  display: inline-block;
+  display: inline;
   font-weight: bold;
   color: yellowgreen;
 }

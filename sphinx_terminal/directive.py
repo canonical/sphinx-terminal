@@ -31,6 +31,7 @@ class TerminalDirective(SphinxDirective):
     has_content = True
     option_spec = {
         "class": directives.class_option,
+        "prompt": directives.unchanged,
         "user": directives.unchanged,
         "host": directives.unchanged,
         "dir": directives.unchanged,
@@ -62,7 +63,7 @@ class TerminalDirective(SphinxDirective):
 
         if commands:
             command_node = nodes.inline()
-            command_node.extend(nodes.literal(text=f"{line}\n") for line in commands)
+            command_node.append(nodes.literal(text="\n".join(commands)))
             command_node["classes"].append("command")
             if is_copyable:
                 command_node["classes"].append("copybutton")
@@ -93,8 +94,16 @@ class TerminalDirective(SphinxDirective):
                 "Provide output or remove the 'output-only' option."
             )
 
+        if "prompt" in self.options and self.options.keys() & {"user", "host", "dir"}:
+            raise SphinxError(
+                "The 'prompt' option is incompatible with the 'user', 'host', and 'dir' options. "
+                "Remove the 'prompt' option or the 'user', 'host', and 'dir' options."
+            )
+
         prompt_text = (
-            f"{user}@{host}:{prompt_dir}{user_symbol} "
+            f"{self.options.get('prompt', '')} "
+            if "prompt" in self.options
+            else f"{user}@{host}:{prompt_dir}{user_symbol} "
             if user and host
             else f"{user}:{prompt_dir}{user_symbol} "
             if user

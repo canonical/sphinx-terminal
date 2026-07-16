@@ -46,7 +46,7 @@ def test_terminal_directive(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -59,14 +59,18 @@ def test_terminal_directive(fake_terminal_directive):
 @pytest.mark.parametrize(
     "fake_terminal_directive",
     [
-        {
-            "options": {
-                "user": "author",
-                "host": "canonical",
-                "dir": "~/path",
-            },
-            "content": ["echo 'hello'", "", "hello"],
-        }
+        pytest.param(
+            {
+                "options": {"user": "author", "host": "canonical", "dir": "~/path"},
+                "content": ["echo 'hello'", "", "hello"],
+            }
+        ),
+        pytest.param(
+            {
+                "options": {"prompt": "author@canonical:~/path$"},
+                "content": ["echo 'hello'", "", "hello"],
+            }
+        ),
     ],
     indirect=True,
 )
@@ -91,7 +95,7 @@ def test_terminal_directive_prompt(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -140,7 +144,7 @@ def test_terminal_copy_scroll(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command copybutton"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -186,7 +190,7 @@ def test_terminal_class_option(fake_terminal_directive):
 
     command_container = nodes.inline()
     command_container["classes"] = "command"
-    command = nodes.literal(text="echo 'hello'\n")
+    command = nodes.literal(text="echo 'hello'")
     command_container.append(command)
     input_container.append(command_container)
     expected.append(input_container)
@@ -230,9 +234,7 @@ def test_terminal_multiline(fake_terminal_directive):
     input_container.append(prompt_container)
 
     command_container = nodes.inline()
-    command = nodes.literal(text="echo 'hello'\n")
-    command_container.append(command)
-    command = nodes.literal(text="> echo 'test'\n")
+    command = nodes.literal(text="echo 'hello'\n> echo 'test'")
     command_container.append(command)
     command_container["classes"] = "command"
     input_container.append(command_container)
@@ -341,16 +343,14 @@ def test_terminal_no_output(fake_terminal_directive):
     input_container.append(prompt_container)
 
     command_container = nodes.inline()
-    command = nodes.literal(text="echo 'hello'\n")
-    command_container.append(command)
-    command = nodes.literal(text="> echo 'test'\n")
+    command = nodes.literal(text="echo 'hello'\n> echo 'test'")
     command_container.append(command)
     command_container["classes"] = "command"
     input_container.append(command_container)
     expected.append(input_container)
 
     actual = fake_terminal_directive.run()[0]
-
+    print(f"\n\n{expected}\n\n{actual}\n\n")
     assert str(expected) == str(actual)
 
 
@@ -383,5 +383,29 @@ def test_terminal_copy_output_only(fake_terminal_directive):
     indirect=True,
 )
 def test_terminal_output_only_no_output(fake_terminal_directive):
+    with pytest.raises(SphinxError):
+        fake_terminal_directive.run()
+
+
+@pytest.mark.parametrize(
+    "fake_terminal_directive",
+    [
+        pytest.param({"options": {"prompt": "test", "user": "author"}}),
+        pytest.param({"options": {"prompt": "test", "host": "canonical"}}),
+        pytest.param({"options": {"prompt": "test", "dir": "/path"}}),
+        pytest.param(
+            {
+                "options": {
+                    "prompt": "test",
+                    "user": "author",
+                    "host": "canonical",
+                    "dir": "/path",
+                }
+            }
+        ),
+    ],
+    indirect=True,
+)
+def test_incompatible_prompt_options(fake_terminal_directive):
     with pytest.raises(SphinxError):
         fake_terminal_directive.run()

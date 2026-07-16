@@ -52,7 +52,8 @@ def test_terminal_integration(example_project):
     shutil.rmtree(example_project)  # Delete copied source
 
     # Ensure that the :copy: and :scroll: options are respected
-    assert soup.find("div", {"class": "terminal scroll docutils container"})
+    terminals = soup.find_all("div", {"class": "terminal scroll docutils container"})
+    assert len(terminals) == 2
 
     # Ensure that the prompt renders correctly
     prompt_html = soup.find("span", {"class": "pre"})
@@ -80,3 +81,7 @@ def test_terminal_integration(example_project):
         "code", {"class": "command docutils literal notranslate"}
     )
     assert not input_html
+
+    second_prompt = terminals[1].find_all("span", {"class": "pre"})
+    assert getattr(second_prompt[0], "text", "") == "PS"
+    assert getattr(second_prompt[1], "text", "") == "C:\\Users\\JJ>"
